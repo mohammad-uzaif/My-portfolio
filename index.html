@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mohammad Uzaif | Portfolio</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Premium Google Fonts: Syne (Display) & Inter (Body) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
+        // Tailwind Configuration - Dynamic Variables for Light/Dark mode
         tailwind.config = {
             theme: {
                 extend: {
@@ -32,8 +37,171 @@
         }
     </script>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Light / Dark Mode CSS Variables */
+        :root {
+            --bg-color: #050505;
+            --obsidian-rgb: 5 5 5;        /* Deep Black */
+            --chrome-rgb: 255 255 255;    /* Pure White */
+            --surface-rgb: 17 17 17;      /* Dark Gray */
+            --muted-color: #888888;
+        }
+
+        body.light-mode {
+            --bg-color: #f2f2f2;
+            --obsidian-rgb: 250 250 250;  /* Light Gray/White Backgrounds */
+            --chrome-rgb: 10 10 10;        /* Deep Black Text/Borders */
+            --surface-rgb: 235 235 235;    /* Slightly darker gray for cards */
+            --muted-color: #666666;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: rgb(var(--chrome-rgb));
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* 3D Background */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.6; 
+            transition: opacity 0.5s ease;
+        }
+
+        body.light-mode #canvas-container {
+            opacity: 0.3; /* Subtle network in light mode */
+        }
+
+        /* Sleek Glassmorphism */
+        .glass-float {
+            background: rgba(var(--obsidian-rgb), 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(var(--chrome-rgb), 0.08);
+            transition: all 0.5s ease;
+        }
+
+        /* Aesthetic Glowing text */
+        .glow-text {
+            text-shadow: 0 0 15px rgba(var(--chrome-rgb), 0.5);
+        }
+
+        /* Subtle line hover effects */
+        .hover-line {
+            position: relative;
+        }
+        .hover-line::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: rgb(var(--chrome-rgb));
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+        .hover-line:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Glass Oily Zoom Effect for Theme Toggle Button */
+        .theme-toggle-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 999;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(var(--surface-rgb), 0.4);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(var(--chrome-rgb), 0.15);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            color: rgb(var(--chrome-rgb));
+        }
+
+        .theme-toggle-btn::before {
+            content: "";
+            position: absolute;
+            inset: -200%;
+            /* Oily Iridescent Gradient */
+            background: radial-gradient(circle at center, rgba(255, 0, 150, 0.2), rgba(0, 255, 255, 0.2), rgba(255, 255, 0, 0.2), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        body.light-mode .theme-toggle-btn::before {
+            mix-blend-mode: multiply;
+            background: radial-gradient(circle at center, rgba(255, 100, 150, 0.3), rgba(0, 200, 255, 0.3), rgba(255, 200, 0, 0.3), transparent 50%);
+        }
+
+        .theme-toggle-btn:hover {
+            transform: scale(1.15) translateY(-4px); /* Zoom and lift */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(var(--chrome-rgb), 0.1);
+            border-color: rgba(var(--chrome-rgb), 0.4);
+        }
+
+        .theme-toggle-btn:hover::before {
+            opacity: 1;
+            animation: oily-spin 4s linear infinite;
+        }
+
+        @keyframes oily-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Utility */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+        #loader {
+            position: fixed;
+            inset: 0;
+            background-color: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+        }
+        .loader-text {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+            animation: reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        }
+        @keyframes reveal {
+            0% { transform: translateY(100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        ::selection {
+            background-color: rgb(var(--chrome-rgb));
+            color: rgb(var(--obsidian-rgb));
+        }
+    </style>
 </head>
+
 <body class="selection:bg-chrome selection:text-obsidian">
 
     <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Light/Dark Mode">
@@ -42,15 +210,17 @@
 
     <div id="loader">
         <div class="overflow-hidden">
-            <h2 class="font-display text-2xl tracking-[0.3em] font-semibold loader-text text-chrome">UZAIF <span class="text-muted text-sm font-sans tracking-widest ml-4">INITIALIZING</span></h2>
+            <h2 class="font-display text-2xl tracking-[0.3em] font-semibold loader-text text-chrome">UZAIF <span
+                    class="text-muted text-sm font-sans tracking-widest ml-4">INITIALIZING</span></h2>
         </div>
     </div>
 
     <div id="canvas-container"></div>
 
-    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50 glass-float rounded-full px-6 md:px-8 py-3 w-[90%] md:w-auto flex justify-between gap-8 items-center border border-chrome/10 shadow-2xl transition-all duration-300">
+    <nav
+        class="fixed top-6 left-1/2 -translate-x-1/2 z-50 glass-float rounded-full px-6 md:px-8 py-3 w-[90%] md:w-auto flex justify-between gap-8 items-center border border-chrome/10 shadow-2xl transition-all duration-300">
         <a href="#" class="font-display font-bold text-lg tracking-wider text-chrome">UZAIF.</a>
-        
+
         <div class="hidden md:flex gap-6 text-xs font-medium tracking-widest uppercase text-muted">
             <a href="#about" class="hover:text-chrome transition-colors">About</a>
             <a href="#expertise" class="hover:text-chrome transition-colors">Expertise</a>
@@ -58,13 +228,16 @@
             <a href="#education" class="hover:text-chrome transition-colors">Education</a>
         </div>
 
-        <button id="mobile-menu-btn" class="md:hidden text-chrome hover:text-muted focus:outline-none transition-colors">
+        <button id="mobile-menu-btn"
+            class="md:hidden text-chrome hover:text-muted focus:outline-none transition-colors">
             <i class="fa-solid fa-bars text-lg"></i>
         </button>
     </nav>
 
-    <div id="mobile-menu" class="fixed inset-0 bg-obsidian/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="flex flex-col gap-8 text-center text-2xl font-display font-bold uppercase tracking-widest text-chrome">
+    <div id="mobile-menu"
+        class="fixed inset-0 bg-obsidian/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <div
+            class="flex flex-col gap-8 text-center text-2xl font-display font-bold uppercase tracking-widest text-chrome">
             <a href="#about" class="mobile-link hover:text-muted transition-colors">About</a>
             <a href="#expertise" class="mobile-link hover:text-muted transition-colors">Expertise</a>
             <a href="#projects" class="mobile-link hover:text-muted transition-colors">Projects</a>
@@ -72,53 +245,60 @@
         </div>
     </div>
 
-    <div id="projects-modal" class="fixed inset-0 bg-obsidian/90 backdrop-blur-md z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 px-4">
-        <div id="projects-modal-content" class="bg-surface border border-chrome/10 rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto hide-scroll p-8 md:p-12 relative transform scale-95 transition-transform duration-300 shadow-2xl">
-            
-            <button id="close-projects-modal" class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-chrome/5 hover:bg-chrome hover:text-obsidian transition-colors focus:outline-none text-muted">
+    <!-- Projects Popup Modal -->
+    <div id="projects-modal"
+        class="fixed inset-0 bg-obsidian/90 backdrop-blur-md z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 px-4">
+        <div id="projects-modal-content"
+            class="bg-surface border border-chrome/10 rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto hide-scroll p-8 md:p-12 relative transform scale-95 transition-transform duration-300 shadow-2xl">
+
+            <button id="close-projects-modal"
+                class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-chrome/5 hover:bg-chrome hover:text-obsidian transition-colors focus:outline-none text-muted">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
 
             <h3 class="font-display text-3xl font-bold mb-2 uppercase tracking-tight text-chrome">Project Archive</h3>
             <p class="text-sm text-muted font-mono tracking-widest uppercase mb-10">Additional Mini Projects</p>
-            
+
             <div class="space-y-6">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-chrome/5 pb-6 group">
+                <!-- Portfolio Concept -->
+                <div
+                    class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-chrome/5 pb-6 group">
                     <div>
-                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">Portfolio Concept</h4>
-                        <p class="text-sm text-muted mt-2 leading-relaxed">An exploration into 3D rendering and glassmorphism UI elements using modern web stacks. Features Three.js and Tailwind.</p>
+                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">
+                            Portfolio Concept</h4>
+                        <p class="text-sm text-muted mt-2 leading-relaxed">An exploration into 3D rendering and
+                            glassmorphism UI elements using modern web stacks. Features Three.js and Tailwind.</p>
                     </div>
-                    <a href="https://github.com/yourusername/portfolio-concept" target="_blank" class="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest border border-chrome/20 px-5 py-2.5 rounded-full hover:bg-chrome hover:text-obsidian transition-all shrink-0 text-chrome">
+                    <a href="https://github.com/mohammad-uzaif/My-portfolio" target="_blank"
+                        class="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest border border-chrome/20 px-5 py-2.5 rounded-full hover:bg-chrome hover:text-obsidian transition-all shrink-0 text-chrome">
                         <i class="fa-brands fa-github text-lg"></i> Repo
                     </a>
                 </div>
 
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-chrome/5 pb-6 group">
+                <!-- Weather Dashboard -->
+                <div
+                    class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-chrome/5 pb-6 group">
                     <div>
-                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">Python Data Scraper</h4>
-                        <p class="text-sm text-muted mt-2 leading-relaxed">Automated script utilizing BeautifulSoup and Pandas to extract, clean, and export web data into CSV format.</p>
+                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">
+                            Weather Dashboard</h4>
+                        <p class="text-sm text-muted mt-2 leading-relaxed">{working phase} A responsive dashboard pulling real-time
+                            data via API to display weather conditions globally.</p>
                     </div>
-                    <a href="https://github.com/yourusername/data-scraper" target="_blank" class="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest border border-chrome/20 px-5 py-2.5 rounded-full hover:bg-chrome hover:text-obsidian transition-all shrink-0 text-chrome">
+                    <a href="https://github.com/mohammad-uzaif" target="_blank"
+                        class="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest border border-chrome/20 px-5 py-2.5 rounded-full hover:bg-chrome hover:text-obsidian transition-all shrink-0 text-chrome">
                         <i class="fa-brands fa-github text-lg"></i> Repo
                     </a>
                 </div>
 
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-chrome/5 pb-6 group">
-                    <div>
-                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">C++ Inventory System</h4>
-                        <p class="text-sm text-muted mt-2 leading-relaxed">A terminal-based application managing shop inventory, demonstrating strong OOP concepts and file I/O operations.</p>
-                    </div>
-                    <a href="https://github.com/yourusername/cpp-inventory" target="_blank" class="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest border border-chrome/20 px-5 py-2.5 rounded-full hover:bg-chrome hover:text-obsidian transition-all shrink-0 text-chrome">
-                        <i class="fa-brands fa-github text-lg"></i> Repo
-                    </a>
-                </div>
-                
+                <!-- Task Management App -->
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 group">
                     <div>
-                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">SQL Library DB</h4>
-                        <p class="text-sm text-muted mt-2 leading-relaxed">A relational database schema for a library management system handling user borrows, returns, and book stock logic.</p>
+                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">Task Management App</h4>
+                        <p class="text-sm text-muted mt-2 leading-relaxed">{working phase} A full CRUD application allowing users to
+                            track, edit, and organize daily tasks seamlessly.</p>
                     </div>
-                    <a href="https://github.com/yourusername/sql-library" target="_blank" class="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest border border-chrome/20 px-5 py-2.5 rounded-full hover:bg-chrome hover:text-obsidian transition-all shrink-0 text-chrome">
+                    <a href="https://github.com/mohammad-uzaif" target="_blank"
+                        class="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest border border-chrome/20 px-5 py-2.5 rounded-full hover:bg-chrome hover:text-obsidian transition-all shrink-0 text-chrome">
                         <i class="fa-brands fa-github text-lg"></i> Repo
                     </a>
                 </div>
@@ -127,40 +307,48 @@
     </div>
 
     <main class="relative z-10 container mx-auto px-6 md:px-12 lg:px-24">
-        
+
         <section id="about" class="min-h-screen flex flex-col justify-center pt-20">
             <div class="w-full max-w-5xl">
                 <div class="flex flex-wrap items-center gap-3 md:gap-4 mb-10">
-                    <div class="flex items-center gap-2 text-xs font-mono text-muted uppercase tracking-widest mr-2 md:mr-4">
+                    <div
+                        class="flex items-center gap-2 text-xs font-mono text-muted uppercase tracking-widest mr-2 md:mr-4">
                         <i class="fa-solid fa-location-crosshairs text-chrome animate-pulse"></i>
                         <span>Hyderabad, India</span>
                     </div>
-                    
+
                     <div class="glass-float px-4 py-1.5 rounded-full flex items-center gap-3 border border-chrome/20">
                         <div class="relative flex h-2 w-2">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-chrome opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2 w-2 bg-chrome"></span>
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-chrome opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-chrome"></span>
                         </div>
-                        <span class="text-xs font-medium tracking-wide text-chrome glow-text">700+ Global Connections</span>
+                        <span class="text-xs font-medium tracking-wide text-chrome glow-text">700+ Global
+                            Connections</span>
                     </div>
 
-                    <a href="https://linkedin.com/in/mohd-uzaif-ansari" target="_blank" class="glass-float px-4 py-1.5 rounded-full border border-chrome/10 hover:bg-chrome hover:text-obsidian transition-all flex items-center gap-2 text-xs font-medium tracking-wide text-chrome">
+                    <a href="https://linkedin.com/in/mohd-uzaif-ansari" target="_blank"
+                        class="glass-float px-4 py-1.5 rounded-full border border-chrome/10 hover:bg-chrome hover:text-obsidian transition-all flex items-center gap-2 text-xs font-medium tracking-wide text-chrome">
                         <i class="fa-brands fa-linkedin-in"></i> LinkedIn
                     </a>
-                    <a href="https://github.com/mohammad-uzaif" target="_blank" class="glass-float px-4 py-1.5 rounded-full border border-chrome/10 hover:bg-chrome hover:text-obsidian transition-all flex items-center gap-2 text-xs font-medium tracking-wide text-chrome">
+                    <a href="https://github.com/mohammad-uzaif" target="_blank"
+                        class="glass-float px-4 py-1.5 rounded-full border border-chrome/10 hover:bg-chrome hover:text-obsidian transition-all flex items-center gap-2 text-xs font-medium tracking-wide text-chrome">
                         <i class="fa-brands fa-github"></i> GitHub
                     </a>
-                    <a href="#" class="bg-chrome text-obsidian px-5 py-1.5 rounded-full hover:bg-transparent hover:text-chrome border border-chrome transition-all flex items-center gap-2 text-xs font-bold tracking-widest uppercase ml-1">
+                    <a href="#"
+                        class="bg-chrome text-obsidian px-5 py-1.5 rounded-full hover:bg-transparent hover:text-chrome border border-chrome transition-all flex items-center gap-2 text-xs font-bold tracking-widest uppercase ml-1">
                         <i class="fa-solid fa-arrow-down"></i> Resume
                     </a>
                 </div>
-                
-                <h1 class="font-display text-5xl md:text-7xl lg:text-[7rem] font-bold leading-[0.9] tracking-tighter mb-6 uppercase text-chrome">
+
+                <h1
+                    class="font-display text-5xl md:text-7xl lg:text-[7rem] font-bold leading-[0.9] tracking-tighter mb-6 uppercase text-chrome">
                     Mohammad<br>Uzaif
                 </h1>
-                
+
                 <p class="text-lg md:text-xl text-muted font-light max-w-2xl leading-relaxed mt-8">
-                    Computer Science Engineering student bridging the gap between elegant design and robust system architecture. Focused on building scalable solutions.
+                    Computer Science Engineering student bridging the gap between elegant design and robust system
+                    architecture. Focused on building scalable solutions.
                 </p>
             </div>
         </section>
@@ -173,25 +361,45 @@
                     <h2 class="font-display text-2xl font-bold tracking-tight uppercase text-chrome">Expertise</h2>
                     <p class="text-sm text-muted mt-2">Technologies & Tools</p>
                 </div>
-                
+
                 <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
                     <div>
-                        <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">Languages & DB</h3>
+                        <h3
+                            class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
+                            Languages & DB</h3>
                         <ul class="space-y-4 font-display text-xl md:text-2xl text-chrome">
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default"><span class="w-8 text-center text-muted text-sm"><i class="fa-brands fa-python"></i></span> Python</li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default"><span class="w-8 text-center text-muted text-sm"><i class="fa-brands fa-cuttlefish"></i></span> C & C++</li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default"><span class="w-8 text-center text-muted text-sm"><i class="fa-brands fa-js"></i></span> JavaScript</li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default"><span class="w-8 text-center text-muted text-sm"><i class="fa-brands fa-html5"></i></span> HTML / CSS</li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default"><span class="w-8 text-center text-muted text-sm"><i class="fa-solid fa-database"></i></span> MySQL</li>
+                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                                <span class="w-8 text-center text-muted text-sm"><i
+                                        class="fa-brands fa-python"></i></span> Python</li>
+                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                                <span class="w-8 text-center text-muted text-sm"><i
+                                        class="fa-brands fa-cuttlefish"></i></span> C & C++</li>
+                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                                <span class="w-8 text-center text-muted text-sm"><i class="fa-brands fa-js"></i></span>
+                                JavaScript</li>
+                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                                <span class="w-8 text-center text-muted text-sm"><i
+                                        class="fa-brands fa-html5"></i></span> HTML / CSS</li>
+                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                                <span class="w-8 text-center text-muted text-sm"><i
+                                        class="fa-solid fa-database"></i></span> MySQL</li>
                         </ul>
                     </div>
-                    
+
                     <div>
-                        <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">Workflow</h3>
+                        <h3
+                            class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
+                            Workflow</h3>
                         <ul class="space-y-4 font-display text-xl md:text-2xl text-chrome">
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default"><span class="w-8 text-center text-muted text-sm"><i class="fa-brands fa-git-alt"></i></span> Git</li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default"><span class="w-8 text-center text-muted text-sm"><i class="fa-brands fa-github"></i></span> GitHub</li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default"><span class="w-8 text-center text-muted text-sm"><i class="fa-solid fa-code"></i></span> VS Code</li>
+                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                                <span class="w-8 text-center text-muted text-sm"><i
+                                        class="fa-brands fa-git-alt"></i></span> Git</li>
+                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                                <span class="w-8 text-center text-muted text-sm"><i
+                                        class="fa-brands fa-github"></i></span> GitHub</li>
+                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
+                                <span class="w-8 text-center text-muted text-sm"><i class="fa-solid fa-code"></i></span>
+                                VS Code</li>
                         </ul>
                     </div>
                 </div>
@@ -202,28 +410,45 @@
 
         <section id="projects" class="py-16">
             <div class="flex items-end justify-between mb-16">
-                <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight uppercase text-chrome">Selected Works</h2>
-                <div class="text-xs font-mono text-muted uppercase tracking-widest hidden md:block">Mini & Major Projects</div>
+                <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight uppercase text-chrome">Selected
+                    Works</h2>
+                <div class="text-xs font-mono text-muted uppercase tracking-widest hidden md:block">Mini & Major
+                    Projects</div>
             </div>
 
             <div class="mb-20 group">
-                <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">Major Project</h3>
+                <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
+                    Major Project</h3>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                    <div class="w-full aspect-video bg-surface relative overflow-hidden border border-chrome/5 flex items-center justify-center hover:border-chrome/20 transition-all duration-500">
-                        <i class="fa-solid fa-laptop-code text-6xl text-chrome/10 group-hover:text-chrome/20 group-hover:scale-110 transition-all duration-500"></i>
+                    <div
+                        class="w-full aspect-video bg-surface relative overflow-hidden border border-chrome/5 flex items-center justify-center hover:border-chrome/20 transition-all duration-500">
+                        <i
+                            class="fa-solid fa-laptop-code text-6xl text-chrome/10 group-hover:text-chrome/20 group-hover:scale-110 transition-all duration-500"></i>
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <p class="text-muted font-mono text-sm tracking-widest bg-obsidian/80 px-4 py-2 rounded border border-chrome/10 backdrop-blur-sm">PROJECT PREVIEW</p>
+                            <a href="https://portfoliouzaif.netlify.app/" target="_blank" rel="noopener noreferrer"
+                                class="text-muted font-mono text-sm tracking-widest bg-obsidian/80 px-4 py-2 rounded border border-chrome/10 backdrop-blur-sm hover:text-white hover:border-chrome/50 transition-all cursor-pointer z-10">
+                                CLICK TO PROJECT PREVIEW
+                            </a>
                         </div>
                     </div>
                     <div>
-                        <h4 class="font-display text-3xl md:text-4xl font-bold mb-4 text-chrome group-hover:glow-text transition-all">Enterprise Web System</h4>
-                        <p class="text-muted text-lg leading-relaxed mb-6">A comprehensive description of your major project, the specific problem it solves, and the architecture used to build it. Emphasize the scalability, logic, and design choices implemented during development.</p>
+                        <h4
+                            class="font-display text-3xl md:text-4xl font-bold mb-4 text-chrome group-hover:glow-text transition-all">
+                            My Portfolio</h4>
+                        <p class="text-muted text-lg leading-relaxed mb-6">A comprehensive description of your major
+                            project. Emphasize the scalability, logic, and design choices implemented during
+                            development.</p>
                         <div class="flex flex-wrap gap-3 mb-8">
-                            <span class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">HTML/CSS</span>
-                            <span class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">JavaScript</span>
-                            <span class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">MySQL</span>
+                            <span
+                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">HTML</span>
+                            <span
+                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">CSS
+                                & Tailwind</span>
+                            <span
+                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">JavaScript</span>
                         </div>
-                        <a href="#" class="inline-flex items-center text-sm font-bold uppercase tracking-widest hover:text-chrome text-muted transition-colors hover-line">
+                        <a href="https://github.com/mohammad-uzaif/My-portfolio" target="_blank"
+                            class="inline-flex items-center text-sm font-bold uppercase tracking-widest hover:text-chrome text-muted transition-colors hover-line">
                             View Source Code <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -231,38 +456,54 @@
             </div>
 
             <div>
-                <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">Mini Projects</h3>
+                <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
+                    Mini Projects</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
-                    <div class="p-8 border border-chrome/5 bg-surface/40 hover:bg-surface hover:border-chrome/20 transition-all duration-300 group flex flex-col justify-between h-full">
+
+                    <div
+                        class="p-8 border border-chrome/5 bg-surface/40 hover:bg-surface hover:border-chrome/20 transition-all duration-300 group flex flex-col justify-between h-full">
                         <div>
                             <div class="flex justify-between items-start mb-4">
-                                <i class="fa-regular fa-folder text-2xl text-chrome/50 group-hover:text-chrome transition-colors"></i>
-                                <a href="https://github.com/yourusername/weather-dashboard" target="_blank" class="text-chrome/50 hover:text-chrome transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                                <i
+                                    class="fa-regular fa-folder text-2xl text-chrome/50 group-hover:text-chrome transition-colors"></i>
+                                <a href="https://github.com/mohammad-uzaif" target="_blank"
+                                    class="text-chrome/50 hover:text-chrome transition-colors"><i
+                                        class="fa-brands fa-github text-xl"></i></a>
                             </div>
                             <h4 class="font-display text-xl font-bold mb-3 text-chrome">Weather Dashboard</h4>
-                            <p class="text-sm text-muted mb-6 leading-relaxed">A responsive dashboard pulling real-time data via API to display weather conditions globally.</p>
+                            <p class="text-sm text-muted mb-6 leading-relaxed">{working phase} A responsive dashboard pulling real-time
+                                data via API to display weather conditions globally.</p>
                         </div>
                         <div class="text-xs font-mono text-muted uppercase tracking-wider">JS • API • CSS</div>
                     </div>
 
-                    <div class="p-8 border border-chrome/5 bg-surface/40 hover:bg-surface hover:border-chrome/20 transition-all duration-300 group flex flex-col justify-between h-full">
+                    <div
+                        class="p-8 border border-chrome/5 bg-surface/40 hover:bg-surface hover:border-chrome/20 transition-all duration-300 group flex flex-col justify-between h-full">
                         <div>
                             <div class="flex justify-between items-start mb-4">
-                                <i class="fa-regular fa-folder text-2xl text-chrome/50 group-hover:text-chrome transition-colors"></i>
-                                <a href="https://github.com/yourusername/task-app" target="_blank" class="text-chrome/50 hover:text-chrome transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                                <i
+                                    class="fa-regular fa-folder text-2xl text-chrome/50 group-hover:text-chrome transition-colors"></i>
+                                <a href="https://github.com/mohammad-uzaif" target="_blank"
+                                    class="text-chrome/50 hover:text-chrome transition-colors"><i
+                                        class="fa-brands fa-github text-xl"></i></a>
                             </div>
                             <h4 class="font-display text-xl font-bold mb-3 text-chrome">Task Management App</h4>
-                            <p class="text-sm text-muted mb-6 leading-relaxed">A full CRUD application allowing users to track, edit, and organize daily tasks seamlessly.</p>
+                            <p class="text-sm text-muted mb-6 leading-relaxed">{working phase} A full CRUD application allowing users to
+                                track, edit, and organize daily tasks seamlessly.</p>
                         </div>
                         <div class="text-xs font-mono text-muted uppercase tracking-wider">Python • SQL</div>
                     </div>
 
-                    <div id="open-projects-modal" class="p-8 border border-chrome/5 bg-surface/20 hover:bg-surface hover:border-chrome/20 transition-all duration-300 group flex flex-col items-center justify-center h-full cursor-pointer min-h-[250px]">
-                        <div class="w-16 h-16 rounded-full border border-chrome/10 flex items-center justify-center group-hover:bg-chrome group-hover:text-obsidian group-hover:border-chrome transition-all duration-300 mb-4 shadow-[0_0_0_rgba(255,255,255,0)] group-hover:shadow-[0_0_20px_rgba(var(--chrome-rgb),0.3)]">
-                            <i class="fa-solid fa-plus text-2xl group-hover:rotate-90 transition-transform duration-500"></i>
+                    <div id="open-projects-modal"
+                        class="p-8 border border-chrome/5 bg-surface/20 hover:bg-surface hover:border-chrome/20 transition-all duration-300 group flex flex-col items-center justify-center h-full cursor-pointer min-h-[250px]">
+                        <div
+                            class="w-16 h-16 rounded-full border border-chrome/10 flex items-center justify-center group-hover:bg-chrome group-hover:text-obsidian group-hover:border-chrome transition-all duration-300 mb-4 shadow-[0_0_0_rgba(255,255,255,0)] group-hover:shadow-[0_0_20px_rgba(var(--chrome-rgb),0.3)]">
+                            <i
+                                class="fa-solid fa-plus text-2xl group-hover:rotate-90 transition-transform duration-500"></i>
                         </div>
-                        <h4 class="font-display text-lg font-bold text-chrome/50 group-hover:text-chrome group-hover:tracking-widest transition-all duration-300 uppercase text-center">View More</h4>
+                        <h4
+                            class="font-display text-lg font-bold text-chrome/50 group-hover:text-chrome group-hover:tracking-widest transition-all duration-300 uppercase text-center">
+                            View More</h4>
                     </div>
 
                 </div>
@@ -277,31 +518,40 @@
                     <h2 class="font-display text-2xl font-bold tracking-tight uppercase text-chrome">Academic</h2>
                     <p class="text-sm text-muted mt-2">Educational Journey</p>
                 </div>
-                
+
                 <div class="lg:col-span-3 flex flex-col">
-                    
-                    <div class="group grid grid-cols-1 md:grid-cols-4 gap-4 py-8 border-b border-chrome/5 hover:border-chrome/20 transition-colors">
+
+                    <div
+                        class="group grid grid-cols-1 md:grid-cols-4 gap-4 py-8 border-b border-chrome/5 hover:border-chrome/20 transition-colors">
                         <div class="text-sm font-mono text-muted md:col-span-1 pt-1">Present</div>
                         <div class="md:col-span-3">
-                            <h3 class="font-display text-2xl font-semibold mb-2 text-chrome group-hover:glow-text transition-all">B.Tech in Computer Science</h3>
-                            <a href="https://aktu.ac.in/" target="_blank" class="inline-flex items-center text-muted hover:text-chrome transition-colors hover-line text-lg">
-                                Dr. APJ Abdul Kalam University <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-2 opacity-50"></i>
+                            <h3
+                                class="font-display text-2xl font-semibold mb-2 text-chrome group-hover:glow-text transition-all">
+                                B.Tech in Computer Science</h3>
+                            <a href="https://aktu.ac.in/" target="_blank"
+                                class="inline-flex items-center text-muted hover:text-chrome transition-colors hover-line text-lg">
+                                Dr. APJ Abdul Kalam University <i
+                                    class="fa-solid fa-arrow-up-right-from-square text-xs ml-2 opacity-50"></i>
                             </a>
                         </div>
                     </div>
 
-                    <div class="group grid grid-cols-1 md:grid-cols-4 gap-4 py-8 border-b border-chrome/5 hover:border-chrome/20 transition-colors">
+                    <div
+                        class="group grid grid-cols-1 md:grid-cols-4 gap-4 py-8 border-b border-chrome/5 hover:border-chrome/20 transition-colors">
                         <div class="text-sm font-mono text-muted md:col-span-1 pt-1">2022</div>
                         <div class="md:col-span-3">
-                            <h3 class="font-display text-2xl font-semibold mb-2 text-chrome/80">Class 12th (Intermediate)</h3>
+                            <h3 class="font-display text-2xl font-semibold mb-2 text-chrome/80">Class 12th
+                                (Intermediate)</h3>
                             <p class="text-muted text-lg">Dr. Rizvi Learners Academy</p>
                         </div>
                     </div>
 
-                    <div class="group grid grid-cols-1 md:grid-cols-4 gap-4 py-8 border-b border-chrome/5 hover:border-chrome/20 transition-colors">
+                    <div
+                        class="group grid grid-cols-1 md:grid-cols-4 gap-4 py-8 border-b border-chrome/5 hover:border-chrome/20 transition-colors">
                         <div class="text-sm font-mono text-muted md:col-span-1 pt-1">2020</div>
                         <div class="md:col-span-3">
-                            <h3 class="font-display text-2xl font-semibold mb-2 text-chrome/80">Class 10th (High School)</h3>
+                            <h3 class="font-display text-2xl font-semibold mb-2 text-chrome/80">Class 10th (High School)
+                            </h3>
                             <p class="text-muted text-lg">Dr. Rizvi Learners Academy</p>
                         </div>
                     </div>
@@ -314,54 +564,74 @@
 
         <section id="certifications" class="py-24 relative">
             <div class="flex items-end justify-between mb-16 relative z-10">
-                <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight uppercase text-chrome">Credentials</h2>
-                <div class="text-xs font-mono text-muted uppercase tracking-widest hidden md:block">Drag / Scroll <i class="fa-solid fa-arrow-right ml-2"></i></div>
+                <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight uppercase text-chrome">Credentials
+                </h2>
+                <div class="text-xs font-mono text-muted uppercase tracking-widest hidden md:block">Drag / Scroll <i
+                        class="fa-solid fa-arrow-right ml-2"></i></div>
             </div>
-            
+
             <div class="w-full relative">
                 <div class="flex overflow-x-auto hide-scroll gap-8 md:gap-12 pb-8 snap-x snap-mandatory">
-                    
+
                     <div class="snap-center shrink-0 w-[85vw] md:w-[450px] group cursor-pointer">
-                        <div class="w-full aspect-[4/3] bg-surface overflow-hidden mb-6 relative border border-chrome/5">
+                        <div
+                            class="w-full aspect-[4/3] bg-surface overflow-hidden mb-6 relative border border-chrome/5">
                             <div class="absolute inset-0 flex items-center justify-center mix-blend-overlay">
-                                <i class="fa-solid fa-certificate text-6xl text-chrome opacity-20 group-hover:scale-110 transition-transform duration-500"></i>
+                                <i
+                                    class="fa-solid fa-certificate text-6xl text-chrome opacity-20 group-hover:scale-110 transition-transform duration-500"></i>
                             </div>
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <p class="text-muted font-mono text-sm tracking-widest bg-obsidian/60 px-4 py-2 rounded backdrop-blur">[ CERTIFICATE 1 ]</p>
+                                <p
+                                    class="text-muted font-mono text-sm tracking-widest bg-obsidian/60 px-4 py-2 rounded backdrop-blur">
+                                    [ CERTIFICATE 1 ]</p>
                             </div>
                         </div>
                         <div>
-                            <h3 class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">MSME Certification</h3>
+                            <h3
+                                class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">
+                                MSME Certification</h3>
                             <p class="text-muted text-sm font-mono uppercase tracking-widest">Authorized Platform</p>
                         </div>
                     </div>
 
                     <div class="snap-center shrink-0 w-[85vw] md:w-[450px] group cursor-pointer">
-                        <div class="w-full aspect-[4/3] bg-surface overflow-hidden mb-6 relative border border-chrome/5">
+                        <div
+                            class="w-full aspect-[4/3] bg-surface overflow-hidden mb-6 relative border border-chrome/5">
                             <div class="absolute inset-0 flex items-center justify-center mix-blend-overlay">
-                                <i class="fa-solid fa-code text-6xl text-chrome opacity-20 group-hover:scale-110 transition-transform duration-500"></i>
+                                <i
+                                    class="fa-solid fa-code text-6xl text-chrome opacity-20 group-hover:scale-110 transition-transform duration-500"></i>
                             </div>
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <p class="text-muted font-mono text-sm tracking-widest bg-obsidian/60 px-4 py-2 rounded backdrop-blur">[ CERTIFICATE 2 ]</p>
+                                <p
+                                    class="text-muted font-mono text-sm tracking-widest bg-obsidian/60 px-4 py-2 rounded backdrop-blur">
+                                    [ CERTIFICATE 2 ]</p>
                             </div>
                         </div>
                         <div>
-                            <h3 class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">Web Development Bootcamp</h3>
+                            <h3
+                                class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">
+                                Web Development Bootcamp</h3>
                             <p class="text-muted text-sm font-mono uppercase tracking-widest">Tech Academy</p>
                         </div>
                     </div>
 
                     <div class="snap-center shrink-0 w-[85vw] md:w-[450px] group cursor-pointer">
-                        <div class="w-full aspect-[4/3] bg-surface overflow-hidden mb-6 relative border border-chrome/5">
+                        <div
+                            class="w-full aspect-[4/3] bg-surface overflow-hidden mb-6 relative border border-chrome/5">
                             <div class="absolute inset-0 flex items-center justify-center mix-blend-overlay">
-                                <i class="fa-brands fa-python text-6xl text-chrome opacity-20 group-hover:scale-110 transition-transform duration-500"></i>
+                                <i
+                                    class="fa-brands fa-python text-6xl text-chrome opacity-20 group-hover:scale-110 transition-transform duration-500"></i>
                             </div>
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <p class="text-muted font-mono text-sm tracking-widest bg-obsidian/60 px-4 py-2 rounded backdrop-blur">[ CERTIFICATE 3 ]</p>
+                                <p
+                                    class="text-muted font-mono text-sm tracking-widest bg-obsidian/60 px-4 py-2 rounded backdrop-blur">
+                                    [ CERTIFICATE 3 ]</p>
                             </div>
                         </div>
                         <div>
-                            <h3 class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">Advanced Python Course</h3>
+                            <h3
+                                class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">
+                                Advanced Python Course</h3>
                             <p class="text-muted text-sm font-mono uppercase tracking-widest">Programming Institute</p>
                         </div>
                     </div>
@@ -376,7 +646,7 @@
 
         <section class="py-16">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                
+
                 <div>
                     <h2 class="text-xs font-mono text-muted tracking-widest uppercase mb-8">Linguistics</h2>
                     <ul class="space-y-6">
@@ -402,11 +672,15 @@
                 <div>
                     <h2 class="text-xs font-mono text-muted tracking-widest uppercase mb-8">Outside The Context</h2>
                     <div class="group relative">
-                        <h3 class="font-display text-4xl mb-4 text-chrome hover:glow-text transition-all cursor-default">Badminton</h3>
+                        <h3
+                            class="font-display text-4xl mb-4 text-chrome hover:glow-text transition-all cursor-default">
+                            Badminton</h3>
                         <p class="text-muted leading-relaxed max-w-sm">
-                            Competitive athlete. Secured champion titles during both Class 10th and 12th. Precision, agility, and strategy applied off the screen.
+                            Competitive athlete. Secured champion titles during both Class 10th and 12th. Precision,
+                            agility, and strategy applied off the screen.
                         </p>
-                        <div class="absolute top-0 right-10 text-8xl text-chrome/[0.02] group-hover:text-chrome/[0.05] transition-colors -z-10 font-display font-bold">
+                        <div
+                            class="absolute top-0 right-10 text-8xl text-chrome/[0.02] group-hover:text-chrome/[0.05] transition-colors -z-10 font-display font-bold">
                             01
                         </div>
                     </div>
@@ -415,27 +689,34 @@
             </div>
         </section>
 
-        <footer class="mt-24 pb-12 pt-12 border-t border-chrome/10 flex flex-col md:flex-row justify-between items-end gap-12 transition-colors duration-500">
-            
+        <footer
+            class="mt-24 pb-12 pt-12 border-t border-chrome/10 flex flex-col md:flex-row justify-between items-end gap-12 transition-colors duration-500">
+
             <div class="w-full md:w-auto">
                 <h2 class="font-display text-5xl font-bold mb-6 text-chrome">Let's Talk.</h2>
                 <div class="flex gap-4">
-                    <a href="https://linkedin.com/in/mohd-uzaif-ansari" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
+                    <a href="https://linkedin.com/in/mohd-uzaif-ansari" target="_blank"
+                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
                         <i class="fa-brands fa-linkedin-in"></i>
                     </a>
-                    <a href="https://github.com/mohammad-uzaif" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
+                    <a href="https://github.com/mohammad-uzaif" target="_blank"
+                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
                         <i class="fa-brands fa-github"></i>
                     </a>
-                    <a href="https://twitter.com/ozaifkie" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
+                    <a href="https://twitter.com/ozaifkie" target="_blank"
+                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
                         <i class="fa-brands fa-x-twitter"></i>
                     </a>
-                    <a href="https://facebook.com/" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
+                    <a href="https://facebook.com/" target="_blank"
+                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
                         <i class="fa-brands fa-facebook-f"></i>
                     </a>
-                    <a href="https://instagram.com/ozzzaif" target="_blank" class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
+                    <a href="https://instagram.com/ozzzaif" target="_blank"
+                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
                         <i class="fa-brands fa-instagram"></i>
                     </a>
-                    <a href="mailto:mohammaduzaif0111@gmail.com" class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
+                    <a href="mailto:mohammaduzaif0111@gmail.com"
+                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
                         <i class="fa-regular fa-envelope"></i>
                     </a>
                 </div>
@@ -446,8 +727,9 @@
                 <div class="font-display text-3xl font-bold flex items-center gap-3 text-chrome">
                     <span id="visitor-count">----</span>
                     <span class="relative flex h-3 w-3">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-chrome opacity-40"></span>
-                      <span class="relative inline-flex rounded-full h-3 w-3 bg-chrome"></span>
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-chrome opacity-40"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-chrome"></span>
                     </span>
                 </div>
             </div>
@@ -455,6 +737,272 @@
 
     </main>
 
-    <script src="script.js"></script>
+    <script>
+        // --- Theme Toggle Logic ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        // Initialize Theme Based on Local Storage
+        const savedTheme = localStorage.getItem('uzaifTheme') || 'dark';
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('uzaifTheme', isLight ? 'light' : 'dark');
+            
+            // Toggle Icon and animate rotation
+            themeIcon.style.transform = 'rotate(180deg) scale(0)';
+            
+            setTimeout(() => {
+                if(isLight) {
+                    themeIcon.classList.replace('fa-moon', 'fa-sun');
+                } else {
+                    themeIcon.classList.replace('fa-sun', 'fa-moon');
+                }
+                themeIcon.style.transform = 'rotate(360deg) scale(1)';
+                
+                // Reset transform later to allow future animations
+                setTimeout(() => { themeIcon.style.transform = ''; }, 500);
+            }, 250);
+
+            // Update 3D Background Colors
+            if (window.updateThreeJSTheme) {
+                window.updateThreeJSTheme(isLight);
+            }
+        });
+
+        // --- Loader Logic ---
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.visibility = 'hidden';
+                    initThreeJS(); 
+                }, 800);
+            }, 1200); // Give time for the text reveal animation
+        });
+
+        // --- Mobile Menu Toggle Logic ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
+                mobileMenuBtn.innerHTML = '<i class="fa-solid fa-xmark text-lg"></i>';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+            } else {
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
+                mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars text-lg"></i>';
+                document.body.style.overflow = '';
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+        // --- Projects Modal Logic ---
+        const openProjectsModalBtn = document.getElementById('open-projects-modal');
+        const closeProjectsModalBtn = document.getElementById('close-projects-modal');
+        const projectsModal = document.getElementById('projects-modal');
+        const projectsModalContent = document.getElementById('projects-modal-content');
+
+        function openProjectsModal() {
+            projectsModal.classList.remove('opacity-0', 'pointer-events-none');
+            projectsModalContent.classList.remove('scale-95');
+            projectsModalContent.classList.add('scale-100');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeProjectsModal() {
+            projectsModal.classList.add('opacity-0', 'pointer-events-none');
+            projectsModalContent.classList.remove('scale-100');
+            projectsModalContent.classList.add('scale-95');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        if (openProjectsModalBtn && closeProjectsModalBtn && projectsModal) {
+            openProjectsModalBtn.addEventListener('click', openProjectsModal);
+            closeProjectsModalBtn.addEventListener('click', closeProjectsModal);
+            
+            // Close when clicking outside the content box
+            projectsModal.addEventListener('click', (e) => {
+                if (e.target === projectsModal) {
+                    closeProjectsModal();
+                }
+            });
+        }
+
+        // --- Visitor Counter ---
+        function updateVisitorCount() {
+            let count = localStorage.getItem('uzaifPortfolioViews');
+            if (!count) {
+                count = 1432; // Aesthetic baseline
+            } else {
+                count = parseInt(count) + 1;
+            }
+            localStorage.setItem('uzaifPortfolioViews', count);
+            
+            // Format to look like a digital gauge e.g. 001,432
+            const formatted = count.toString().padStart(6, '0').replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('visitor-count').innerText = formatted;
+        }
+        updateVisitorCount();
+
+        // --- Three.js Abstract Constellation Background ---
+        function initThreeJS() {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            
+            // Camera setup to view the flat-ish network
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 250;
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Optimize performance
+            container.appendChild(renderer.domElement);
+
+            // Particles
+            const particleCount = 400; // Less is more elegant
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const velocities = [];
+
+            // Spread them out in a wide, slightly deep plane
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 800;     // X
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 800; // Y
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 200; // Z depth
+
+                // subtle random movement speed
+                velocities.push({
+                    x: (Math.random() - 0.5) * 0.2,
+                    y: (Math.random() - 0.5) * 0.2,
+                    z: (Math.random() - 0.5) * 0.1
+                });
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            // Minimalist points
+            const isInitiallyLight = document.body.classList.contains('light-mode');
+            const particleColor = isInitiallyLight ? 0x000000 : 0xffffff;
+
+            const material = new THREE.PointsMaterial({
+                color: particleColor,
+                size: 1.5,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            // Lines connecting close particles
+            const lineMaterial = new THREE.LineBasicMaterial({
+                color: particleColor,
+                transparent: true,
+                opacity: 0.1
+            });
+            
+            const lineGeometry = new THREE.BufferGeometry();
+            const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
+            scene.add(linesMesh);
+
+            // Export function to update colors on theme switch
+            window.updateThreeJSTheme = function(isLight) {
+                const color = isLight ? 0x000000 : 0xffffff;
+                material.color.setHex(color);
+                lineMaterial.color.setHex(color);
+            };
+
+            // Mouse Interaction for subtle parallax
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX) * 0.05;
+                mouseY = (event.clientY - windowHalfY) * 0.05;
+            });
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Update particle positions
+                const positions = particles.geometry.attributes.position.array;
+                
+                // Array to hold dynamic line segments
+                const linePositions = [];
+
+                for (let i = 0; i < particleCount; i++) {
+                    // Move
+                    positions[i * 3] += velocities[i].x;
+                    positions[i * 3 + 1] += velocities[i].y;
+                    positions[i * 3 + 2] += velocities[i].z;
+
+                    // Bounds check to keep them from flying away
+                    if (positions[i * 3] < -400 || positions[i * 3] > 400) velocities[i].x *= -1;
+                    if (positions[i * 3 + 1] < -400 || positions[i * 3 + 1] > 400) velocities[i].y *= -1;
+                    if (positions[i * 3 + 2] < -100 || positions[i * 3 + 2] > 100) velocities[i].z *= -1;
+
+                    // Check distances for lines (O(n^2) simple approach, optimized by low particle count)
+                    for(let j = i + 1; j < particleCount; j++) {
+                        const dx = positions[i * 3] - positions[j * 3];
+                        const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                        const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                        const distSq = dx*dx + dy*dy + dz*dz;
+
+                        // If close enough, draw a line segment
+                        if (distSq < 3000) {
+                            linePositions.push(
+                                positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2],
+                                positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]
+                            );
+                        }
+                    }
+                }
+
+                particles.geometry.attributes.position.needsUpdate = true;
+                
+                // Update Lines
+                linesMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+
+                // Smooth Camera Parallax Pan
+                targetX = mouseX;
+                targetY = mouseY;
+                camera.position.x += (targetX - camera.position.x) * 0.02;
+                camera.position.y += (-targetY - camera.position.y) * 0.02;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+            }
+
+            // Handle Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            animate();
+        }
+    </script>
 </body>
 </html>

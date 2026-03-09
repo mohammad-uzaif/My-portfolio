@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mohammad Uzaif | Portfolio</title>
-    
+    <link rel="icon" type="image/png" href="logo.png">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Premium Google Fonts: Syne (Display) & Inter (Body) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -41,17 +45,23 @@
         /* Light / Dark Mode CSS Variables */
         :root {
             --bg-color: #050505;
-            --obsidian-rgb: 5 5 5;        /* Deep Black */
-            --chrome-rgb: 255 255 255;    /* Pure White */
-            --surface-rgb: 17 17 17;      /* Dark Gray */
+            --obsidian-rgb: 5 5 5;
+            /* Deep Black */
+            --chrome-rgb: 255 255 255;
+            /* Pure White */
+            --surface-rgb: 17 17 17;
+            /* Dark Gray */
             --muted-color: #888888;
         }
 
         body.light-mode {
             --bg-color: #f2f2f2;
-            --obsidian-rgb: 250 250 250;  /* Light Gray/White Backgrounds */
-            --chrome-rgb: 10 10 10;        /* Deep Black Text/Borders */
-            --surface-rgb: 235 235 235;    /* Slightly darker gray for cards */
+            --obsidian-rgb: 250 250 250;
+            /* Light Gray/White Backgrounds */
+            --chrome-rgb: 10 10 10;
+            /* Deep Black Text/Borders */
+            --surface-rgb: 235 235 235;
+            /* Slightly darker gray for cards */
             --muted-color: #666666;
         }
 
@@ -73,12 +83,13 @@
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.6; 
+            opacity: 0.6;
             transition: opacity 0.5s ease;
         }
 
         body.light-mode #canvas-container {
-            opacity: 0.3; /* Subtle network in light mode */
+            opacity: 0.3;
+            /* Subtle network in light mode */
         }
 
         /* Sleek Glassmorphism */
@@ -99,6 +110,7 @@
         .hover-line {
             position: relative;
         }
+
         .hover-line::after {
             content: '';
             position: absolute;
@@ -111,6 +123,7 @@
             transform-origin: bottom right;
             transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
         }
+
         .hover-line:hover::after {
             transform: scaleX(1);
             transform-origin: bottom left;
@@ -132,7 +145,7 @@
             backdrop-filter: blur(16px) saturate(180%);
             -webkit-backdrop-filter: blur(16px) saturate(180%);
             border: 1px solid rgba(var(--chrome-rgb), 0.15);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             overflow: hidden;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
@@ -157,7 +170,8 @@
         }
 
         .theme-toggle-btn:hover {
-            transform: scale(1.15) translateY(-4px); /* Zoom and lift */
+            transform: scale(1.15) translateY(-4px);
+            /* Zoom and lift */
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(var(--chrome-rgb), 0.1);
             border-color: rgba(var(--chrome-rgb), 0.4);
         }
@@ -168,13 +182,24 @@
         }
 
         @keyframes oily-spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Utility */
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
 
         #loader {
             position: fixed;
@@ -186,13 +211,22 @@
             align-items: center;
             transition: opacity 0.8s ease-in-out, visibility 0.8s;
         }
+
         .loader-text {
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
             animation: reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
         }
+
         @keyframes reveal {
-            0% { transform: translateY(100%); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+            0% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         ::selection {
@@ -281,7 +315,8 @@
                     <div>
                         <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">
                             Weather Dashboard</h4>
-                        <p class="text-sm text-muted mt-2 leading-relaxed">{working phase} A responsive dashboard pulling real-time
+                        <p class="text-sm text-muted mt-2 leading-relaxed">{working phase} A responsive dashboard
+                            pulling real-time
                             data via API to display weather conditions globally.</p>
                     </div>
                     <a href="https://github.com/mohammad-uzaif" target="_blank"
@@ -293,8 +328,10 @@
                 <!-- Task Management App -->
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 group">
                     <div>
-                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">Task Management App</h4>
-                        <p class="text-sm text-muted mt-2 leading-relaxed">{working phase} A full CRUD application allowing users to
+                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">Task
+                            Management App</h4>
+                        <p class="text-sm text-muted mt-2 leading-relaxed">{working phase} A full CRUD application
+                            allowing users to
                             track, edit, and organize daily tasks seamlessly.</p>
                     </div>
                     <a href="https://github.com/mohammad-uzaif" target="_blank"
@@ -370,19 +407,24 @@
                         <ul class="space-y-4 font-display text-xl md:text-2xl text-chrome">
                             <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
                                 <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-brands fa-python"></i></span> Python</li>
+                                        class="fa-brands fa-python"></i></span> Python
+                            </li>
                             <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
                                 <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-brands fa-cuttlefish"></i></span> C & C++</li>
+                                        class="fa-brands fa-cuttlefish"></i></span> C & C++
+                            </li>
                             <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
                                 <span class="w-8 text-center text-muted text-sm"><i class="fa-brands fa-js"></i></span>
-                                JavaScript</li>
+                                JavaScript
+                            </li>
                             <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
                                 <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-brands fa-html5"></i></span> HTML / CSS</li>
+                                        class="fa-brands fa-html5"></i></span> HTML / CSS
+                            </li>
                             <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
                                 <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-solid fa-database"></i></span> MySQL</li>
+                                        class="fa-solid fa-database"></i></span> MySQL
+                            </li>
                         </ul>
                     </div>
 
@@ -393,13 +435,16 @@
                         <ul class="space-y-4 font-display text-xl md:text-2xl text-chrome">
                             <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
                                 <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-brands fa-git-alt"></i></span> Git</li>
+                                        class="fa-brands fa-git-alt"></i></span> Git
+                            </li>
                             <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
                                 <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-brands fa-github"></i></span> GitHub</li>
+                                        class="fa-brands fa-github"></i></span> GitHub
+                            </li>
                             <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
                                 <span class="w-8 text-center text-muted text-sm"><i class="fa-solid fa-code"></i></span>
-                                VS Code</li>
+                                VS Code
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -455,6 +500,47 @@
                 </div>
             </div>
 
+            <div class="mb-20 group">
+                <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
+                    Major Project</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                    <div
+                        class="w-full aspect-video bg-surface relative overflow-hidden border border-chrome/5 flex items-center justify-center hover:border-chrome/20 transition-all duration-500">
+                        <i
+                            class="fa-solid fa-mobile-screen text-6xl text-chrome/10 group-hover:text-chrome/20 group-hover:scale-110 transition-all duration-500"></i>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <!-- Update the href below with your Safa Tasbeeh App live link -->
+                            <a href="#" target="_blank" rel="noopener noreferrer"
+                                class="text-muted font-mono text-sm tracking-widest bg-obsidian/80 px-4 py-2 rounded border border-chrome/10 backdrop-blur-sm hover:text-white hover:border-chrome/50 transition-all cursor-pointer z-10">
+                                CLICK TO PROJECT PREVIEW
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <h4
+                            class="font-display text-3xl md:text-4xl font-bold mb-4 text-chrome group-hover:glow-text transition-all">
+                            Safa Tasbeeh App</h4>
+                        <p class="text-muted text-lg leading-relaxed mb-6">A digital Tasbeeh counter application
+                            designed for seamless spiritual tracking. Built with modern web technologies ensuring a
+                            smooth user experience across devices.</p>
+                        <div class="flex flex-wrap gap-3 mb-8">
+                            <span
+                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">HTML</span>
+                            <span
+                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">CSS
+                                & Tailwind</span>
+                            <span
+                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">JavaScript</span>
+                        </div>
+                        <!-- Update the href below with your Safa Tasbeeh App GitHub link -->
+                        <a href="#" target="_blank"
+                            class="inline-flex items-center text-sm font-bold uppercase tracking-widest hover:text-chrome text-muted transition-colors hover-line">
+                            View Source Code <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <div>
                 <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
                     Mini Projects</h3>
@@ -471,7 +557,8 @@
                                         class="fa-brands fa-github text-xl"></i></a>
                             </div>
                             <h4 class="font-display text-xl font-bold mb-3 text-chrome">Weather Dashboard</h4>
-                            <p class="text-sm text-muted mb-6 leading-relaxed">{working phase} A responsive dashboard pulling real-time
+                            <p class="text-sm text-muted mb-6 leading-relaxed">{working phase} A responsive dashboard
+                                pulling real-time
                                 data via API to display weather conditions globally.</p>
                         </div>
                         <div class="text-xs font-mono text-muted uppercase tracking-wider">JS • API • CSS</div>
@@ -488,7 +575,8 @@
                                         class="fa-brands fa-github text-xl"></i></a>
                             </div>
                             <h4 class="font-display text-xl font-bold mb-3 text-chrome">Task Management App</h4>
-                            <p class="text-sm text-muted mb-6 leading-relaxed">{working phase} A full CRUD application allowing users to
+                            <p class="text-sm text-muted mb-6 leading-relaxed">{working phase} A full CRUD application
+                                allowing users to
                                 track, edit, and organize daily tasks seamlessly.</p>
                         </div>
                         <div class="text-xs font-mono text-muted uppercase tracking-wider">Python • SQL</div>
@@ -576,15 +664,10 @@
                     <div class="snap-center shrink-0 w-[85vw] md:w-[450px] group cursor-pointer">
                         <div
                             class="w-full aspect-[4/3] bg-surface overflow-hidden mb-6 relative border border-chrome/5">
-                            <div class="absolute inset-0 flex items-center justify-center mix-blend-overlay">
-                                <i
-                                    class="fa-solid fa-certificate text-6xl text-chrome opacity-20 group-hover:scale-110 transition-transform duration-500"></i>
-                            </div>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <p
-                                    class="text-muted font-mono text-sm tracking-widest bg-obsidian/60 px-4 py-2 rounded backdrop-blur">
-                                    [ CERTIFICATE 1 ]</p>
-                            </div>
+
+                            <img src="certificate.png" alt="MSME Certification"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+
                         </div>
                         <div>
                             <h3
@@ -610,8 +693,8 @@
                         <div>
                             <h3
                                 class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">
-                                Web Development Bootcamp</h3>
-                            <p class="text-muted text-sm font-mono uppercase tracking-widest">Tech Academy</p>
+                                Nill</h3>
+                            <p class="text-muted text-sm font-mono uppercase tracking-widest">will be updated</p>
                         </div>
                     </div>
 
@@ -631,8 +714,8 @@
                         <div>
                             <h3
                                 class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">
-                                Advanced Python Course</h3>
-                            <p class="text-muted text-sm font-mono uppercase tracking-widest">Programming Institute</p>
+                                Nill</h3>
+                            <p class="text-muted text-sm font-mono uppercase tracking-widest">Will be updated</p>
                         </div>
                     </div>
 
@@ -741,7 +824,7 @@
         // --- Theme Toggle Logic ---
         const themeToggleBtn = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
-        
+
         // Initialize Theme Based on Local Storage
         const savedTheme = localStorage.getItem('uzaifTheme') || 'dark';
         if (savedTheme === 'light') {
@@ -751,21 +834,21 @@
 
         themeToggleBtn.addEventListener('click', () => {
             document.body.classList.toggle('light-mode');
-            
+
             const isLight = document.body.classList.contains('light-mode');
             localStorage.setItem('uzaifTheme', isLight ? 'light' : 'dark');
-            
+
             // Toggle Icon and animate rotation
             themeIcon.style.transform = 'rotate(180deg) scale(0)';
-            
+
             setTimeout(() => {
-                if(isLight) {
+                if (isLight) {
                     themeIcon.classList.replace('fa-moon', 'fa-sun');
                 } else {
                     themeIcon.classList.replace('fa-sun', 'fa-moon');
                 }
                 themeIcon.style.transform = 'rotate(360deg) scale(1)';
-                
+
                 // Reset transform later to allow future animations
                 setTimeout(() => { themeIcon.style.transform = ''; }, 500);
             }, 250);
@@ -783,7 +866,7 @@
                 loader.style.opacity = '0';
                 setTimeout(() => {
                     loader.style.visibility = 'hidden';
-                    initThreeJS(); 
+                    initThreeJS();
                 }, 800);
             }, 1200); // Give time for the text reveal animation
         });
@@ -835,7 +918,7 @@
         if (openProjectsModalBtn && closeProjectsModalBtn && projectsModal) {
             openProjectsModalBtn.addEventListener('click', openProjectsModal);
             closeProjectsModalBtn.addEventListener('click', closeProjectsModal);
-            
+
             // Close when clicking outside the content box
             projectsModal.addEventListener('click', (e) => {
                 if (e.target === projectsModal) {
@@ -853,7 +936,7 @@
                 count = parseInt(count) + 1;
             }
             localStorage.setItem('uzaifPortfolioViews', count);
-            
+
             // Format to look like a digital gauge e.g. 001,432
             const formatted = count.toString().padStart(6, '0').replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             document.getElementById('visitor-count').innerText = formatted;
@@ -864,7 +947,7 @@
         function initThreeJS() {
             const container = document.getElementById('canvas-container');
             const scene = new THREE.Scene();
-            
+
             // Camera setup to view the flat-ish network
             const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = 250;
@@ -916,13 +999,13 @@
                 transparent: true,
                 opacity: 0.1
             });
-            
+
             const lineGeometry = new THREE.BufferGeometry();
             const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
             scene.add(linesMesh);
 
             // Export function to update colors on theme switch
-            window.updateThreeJSTheme = function(isLight) {
+            window.updateThreeJSTheme = function (isLight) {
                 const color = isLight ? 0x000000 : 0xffffff;
                 material.color.setHex(color);
                 lineMaterial.color.setHex(color);
@@ -947,7 +1030,7 @@
 
                 // Update particle positions
                 const positions = particles.geometry.attributes.position.array;
-                
+
                 // Array to hold dynamic line segments
                 const linePositions = [];
 
@@ -963,11 +1046,11 @@
                     if (positions[i * 3 + 2] < -100 || positions[i * 3 + 2] > 100) velocities[i].z *= -1;
 
                     // Check distances for lines (O(n^2) simple approach, optimized by low particle count)
-                    for(let j = i + 1; j < particleCount; j++) {
+                    for (let j = i + 1; j < particleCount; j++) {
                         const dx = positions[i * 3] - positions[j * 3];
                         const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
                         const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
-                        const distSq = dx*dx + dy*dy + dz*dz;
+                        const distSq = dx * dx + dy * dy + dz * dz;
 
                         // If close enough, draw a line segment
                         if (distSq < 3000) {
@@ -980,7 +1063,7 @@
                 }
 
                 particles.geometry.attributes.position.needsUpdate = true;
-                
+
                 // Update Lines
                 linesMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
 
@@ -1005,4 +1088,5 @@
         }
     </script>
 </body>
+
 </html>

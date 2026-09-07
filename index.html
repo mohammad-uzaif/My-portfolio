@@ -1,40 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohammad Uzaif | Portfolio</title>
-    <link rel="icon" type="image/png" href="logo.png">
+    <title>Mohammad Uzaif | Professional Portfolio</title>
+    <!-- Placeholder Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Premium Google Fonts: Syne (Display) & Inter (Body) -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap"
-        rel="stylesheet">
+    <!-- Google Fonts: Space Grotesk (Tech) & Inter (Readability) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Three.js -->
+    <!-- Three.js & Controls -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
-        // Tailwind Configuration - Dynamic Variables for Light/Dark mode
         tailwind.config = {
+            darkMode: 'class', // Enable class-based dark mode
             theme: {
                 extend: {
-                    colors: {
-                        obsidian: 'rgb(var(--obsidian-rgb) / <alpha-value>)',
-                        chrome: 'rgb(var(--chrome-rgb) / <alpha-value>)',
-                        muted: 'var(--muted-color)',
-                        surface: 'rgb(var(--surface-rgb) / <alpha-value>)'
-                    },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        display: ['Syne', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        // Adaptive Brand Colors
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            400: '#38bdf8', // Cyber Blue equivalent
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        // Surface Colors for Glassmorphism
+                        surface: {
+                            light: 'rgba(255, 255, 255, 0.7)',
+                            dark: 'rgba(15, 23, 42, 0.7)', // Deep slate
+                        },
+                        border: {
+                            light: 'rgba(255, 255, 255, 0.4)',
+                            dark: 'rgba(255, 255, 255, 0.1)',
+                        }
+                    },
+                    boxShadow: {
+                        'glass-light': '0 8px 32px 0 rgba(31, 38, 135, 0.1)',
+                        'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
                     }
                 }
             }
@@ -42,976 +77,790 @@
     </script>
 
     <style>
-        /* Light / Dark Mode CSS Variables */
+        /* Base Variables - Transition smoothly */
         :root {
-            --bg-color: #050505;
-            --obsidian-rgb: 5 5 5;
-            /* Deep Black */
-            --chrome-rgb: 255 255 255;
-            /* Pure White */
-            --surface-rgb: 17 17 17;
-            /* Dark Gray */
-            --muted-color: #888888;
+            --bg-base: #f8fafc; /* slate-50 */
+            --text-main: #0f172a; /* slate-900 */
+            --text-muted: #64748b; /* slate-500 */
         }
 
-        body.light-mode {
-            --bg-color: #f2f2f2;
-            --obsidian-rgb: 250 250 250;
-            /* Light Gray/White Backgrounds */
-            --chrome-rgb: 10 10 10;
-            /* Deep Black Text/Borders */
-            --surface-rgb: 235 235 235;
-            /* Slightly darker gray for cards */
-            --muted-color: #666666;
+        .dark {
+            --bg-base: #020617; /* slate-950 */
+            --text-main: #f8fafc; /* slate-50 */
+            --text-muted: #94a3b8; /* slate-400 */
         }
 
         body {
-            background-color: var(--bg-color);
-            color: rgb(var(--chrome-rgb));
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            transition: background-color 0.4s ease, color 0.4s ease;
             overflow-x: hidden;
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            transition: background-color 0.5s ease, color 0.5s ease;
+            /* Hide scrollbar but keep functionality */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        body::-webkit-scrollbar {
+            display: none;
         }
 
-        /* 3D Background */
-        #canvas-container {
+        /* 3D Canvas Background */
+        #webgl-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.6;
-            transition: opacity 0.5s ease;
-        }
-
-        body.light-mode #canvas-container {
-            opacity: 0.3;
-            /* Subtle network in light mode */
-        }
-
-        /* Sleek Glassmorphism */
-        .glass-float {
-            background: rgba(var(--obsidian-rgb), 0.4);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(var(--chrome-rgb), 0.08);
-            transition: all 0.5s ease;
-        }
-
-        /* Aesthetic Glowing text */
-        .glow-text {
-            text-shadow: 0 0 15px rgba(var(--chrome-rgb), 0.5);
-        }
-
-        /* Subtle line hover effects */
-        .hover-line {
-            position: relative;
-        }
-
-        .hover-line::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            bottom: -2px;
-            left: 0;
-            background-color: rgb(var(--chrome-rgb));
-            transform: scaleX(0);
-            transform-origin: bottom right;
-            transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
-        }
-
-        .hover-line:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
-
-        /* Glass Oily Zoom Effect for Theme Toggle Button */
-        .theme-toggle-btn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 999;
-            width: 3.5rem;
-            height: 3.5rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(var(--surface-rgb), 0.4);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border: 1px solid rgba(var(--chrome-rgb), 0.15);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            overflow: hidden;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-            color: rgb(var(--chrome-rgb));
-        }
-
-        .theme-toggle-btn::before {
-            content: "";
-            position: absolute;
-            inset: -200%;
-            /* Oily Iridescent Gradient */
-            background: radial-gradient(circle at center, rgba(255, 0, 150, 0.2), rgba(0, 255, 255, 0.2), rgba(255, 255, 0, 0.2), transparent 50%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
             pointer-events: none;
+            /* Subtle blending based on theme */
+            mix-blend-mode: normal;
+        }
+        .dark #webgl-container {
             mix-blend-mode: screen;
         }
 
-        body.light-mode .theme-toggle-btn::before {
-            mix-blend-mode: multiply;
-            background: radial-gradient(circle at center, rgba(255, 100, 150, 0.3), rgba(0, 200, 255, 0.3), rgba(255, 200, 0, 0.3), transparent 50%);
+        /* Ambient Blobs (CSS Background) */
+        .ambient-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -2;
+            opacity: 0.5;
+            transition: opacity 0.5s ease, background-color 0.5s ease;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background-color: #bae6fd; animation-delay: 0s; }
+        .blob-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background-color: #ddd6fe; animation-delay: 2s; }
+        
+        .dark .blob-1 { background-color: #0c4a6e; opacity: 0.3; }
+        .dark .blob-2 { background-color: #4c1d95; opacity: 0.3; }
+
+        /* Professional Glassmorphism UI */
+        .glass-panel {
+            background: var(--surface-light, rgba(255, 255, 255, 0.65));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
         }
 
-        .theme-toggle-btn:hover {
-            transform: scale(1.15) translateY(-4px);
-            /* Zoom and lift */
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(var(--chrome-rgb), 0.1);
-            border-color: rgba(var(--chrome-rgb), 0.4);
+        .dark .glass-panel {
+            background: var(--surface-dark, rgba(15, 23, 42, 0.65));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.4);
         }
 
-        .theme-toggle-btn:hover::before {
-            opacity: 1;
-            animation: oily-spin 4s linear infinite;
+        .glass-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+        .dark .glass-panel:hover {
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
-        @keyframes oily-spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
+        /* Glowing Text (Subtle in Light, Pop in Dark) */
+        .text-glow-hover {
+            transition: text-shadow 0.3s ease, color 0.3s ease;
+        }
+        .dark .text-glow-hover:hover {
+            color: #38bdf8;
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
         }
 
-        /* Utility */
-        .hide-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .hide-scroll {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
+        /* Initial Loader */
         #loader {
             position: fixed;
             inset: 0;
-            background-color: var(--bg-color);
+            background-color: var(--bg-base);
             z-index: 9999;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
         }
-
-        .loader-text {
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-            animation: reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        
+        .loader-ring {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(148, 163, 184, 0.2);
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        @keyframes reveal {
-            0% {
-                transform: translateY(100%);
-                opacity: 0;
-            }
-
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        /* Reveal Animations */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        ::selection {
-            background-color: rgb(var(--chrome-rgb));
-            color: rgb(var(--obsidian-rgb));
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 
-<body class="selection:bg-chrome selection:text-obsidian">
+<body class="antialiased selection:bg-brand-500 selection:text-white dark:selection:bg-brand-400 dark:selection:text-slate-900 transition-colors duration-300">
 
-    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Light/Dark Mode">
-        <i id="theme-icon" class="fa-solid fa-moon text-xl relative z-10 transition-transform duration-500"></i>
-    </button>
+    <!-- CSS Ambient Background -->
+    <div class="ambient-blob blob-1 animate-blob"></div>
+    <div class="ambient-blob blob-2 animate-blob"></div>
 
+    <!-- Initial Loader -->
     <div id="loader">
-        <div class="overflow-hidden">
-            <h2 class="font-display text-2xl tracking-[0.3em] font-semibold loader-text text-chrome">UZAIF <span
-                    class="text-muted text-sm font-sans tracking-widest ml-4">INITIALIZING</span></h2>
-        </div>
+        <div class="loader-ring mb-4"></div>
+        <p class="font-display font-semibold tracking-widest text-sm uppercase text-slate-500 dark:text-slate-400 animate-pulse">Initializing Workspace</p>
     </div>
 
-    <div id="canvas-container"></div>
+    <!-- 3D Canvas Background -->
+    <div id="webgl-container"></div>
 
-    <nav
-        class="fixed top-6 left-1/2 -translate-x-1/2 z-50 glass-float rounded-full px-6 md:px-8 py-3 w-[90%] md:w-auto flex justify-between gap-8 items-center border border-chrome/10 shadow-2xl transition-all duration-300">
-        <a href="#" class="font-display font-bold text-lg tracking-wider text-chrome">UZAIF.</a>
+    <!-- Navigation -->
+    <nav class="fixed top-4 w-full z-50 px-4 transition-all duration-300" id="navbar">
+        <div class="max-w-5xl mx-auto glass-panel rounded-full px-6 py-3 flex justify-between items-center">
+            
+            <!-- Logo -->
+            <a href="#" class="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white flex items-center gap-2 group">
+                <div class="w-8 h-8 rounded bg-brand-500 dark:bg-brand-400 flex items-center justify-center text-white dark:text-slate-900 shadow-lg group-hover:rotate-12 transition-transform">
+                    <span class="text-sm">U</span>
+                </div>
+                <span>UZAIF<span class="text-brand-500 dark:text-brand-400">.</span></span>
+            </a>
+            
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+                <a href="#about" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 after:transition-all hover:after:w-full">About</a>
+                <a href="#expertise" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 after:transition-all hover:after:w-full">Expertise</a>
+                <a href="#projects" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 after:transition-all hover:after:w-full">Projects</a>
+                <a href="#certifications" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 after:transition-all hover:after:w-full">Credentials</a>
+            </div>
 
-        <div class="hidden md:flex gap-6 text-xs font-medium tracking-widest uppercase text-muted">
-            <a href="#about" class="hover:text-chrome transition-colors">About</a>
-            <a href="#expertise" class="hover:text-chrome transition-colors">Expertise</a>
-            <a href="#projects" class="hover:text-chrome transition-colors">Projects</a>
-            <a href="#education" class="hover:text-chrome transition-colors">Education</a>
+            <!-- Controls (Theme + Mobile Menu) -->
+            <div class="flex items-center gap-4">
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" aria-label="Toggle Theme">
+                    <i id="theme-icon-light" class="fa-solid fa-sun hidden dark:block"></i>
+                    <i id="theme-icon-dark" class="fa-solid fa-moon block dark:hidden"></i>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300" id="mobile-menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
         </div>
-
-        <button id="mobile-menu-btn"
-            class="md:hidden text-chrome hover:text-muted focus:outline-none transition-colors">
-            <i class="fa-solid fa-bars text-lg"></i>
-        </button>
     </nav>
 
-    <div id="mobile-menu"
-        class="fixed inset-0 bg-obsidian/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
-        <div
-            class="flex flex-col gap-8 text-center text-2xl font-display font-bold uppercase tracking-widest text-chrome">
-            <a href="#about" class="mobile-link hover:text-muted transition-colors">About</a>
-            <a href="#expertise" class="mobile-link hover:text-muted transition-colors">Expertise</a>
-            <a href="#projects" class="mobile-link hover:text-muted transition-colors">Projects</a>
-            <a href="#education" class="mobile-link hover:text-muted transition-colors">Education</a>
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <button id="close-mobile-menu" class="absolute top-6 right-6 w-12 h-12 rounded-full glass-panel flex items-center justify-center text-xl">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="flex flex-col gap-6 text-center text-3xl font-display font-bold">
+            <a href="#about" class="mobile-link text-slate-800 dark:text-white hover:text-brand-500 dark:hover:text-brand-400">About</a>
+            <a href="#expertise" class="mobile-link text-slate-800 dark:text-white hover:text-brand-500 dark:hover:text-brand-400">Expertise</a>
+            <a href="#projects" class="mobile-link text-slate-800 dark:text-white hover:text-brand-500 dark:hover:text-brand-400">Projects</a>
+            <a href="#certifications" class="mobile-link text-slate-800 dark:text-white hover:text-brand-500 dark:hover:text-brand-400">Credentials</a>
         </div>
     </div>
 
-    <!-- Projects Popup Modal -->
-    <div id="projects-modal"
-        class="fixed inset-0 bg-obsidian/90 backdrop-blur-md z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 px-4">
-        <div id="projects-modal-content"
-            class="bg-surface border border-chrome/10 rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto hide-scroll p-8 md:p-12 relative transform scale-95 transition-transform duration-300 shadow-2xl">
-
-            <button id="close-projects-modal"
-                class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-chrome/5 hover:bg-chrome hover:text-obsidian transition-colors focus:outline-none text-muted">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-
-            <h3 class="font-display text-3xl font-bold mb-2 uppercase tracking-tight text-chrome">Project Archive</h3>
-            <p class="text-sm text-muted font-mono tracking-widest uppercase mb-10">Additional Mini Projects</p>
-
-            <div class="space-y-6">
-                <!-- Portfolio Concept -->
-                <div
-                    class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-chrome/5 pb-6 group">
-                    <div>
-                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">
-                            Portfolio Concept</h4>
-                        <p class="text-sm text-muted mt-2 leading-relaxed">An exploration into 3D rendering and
-                            glassmorphism UI elements using modern web stacks. Features Three.js and Tailwind.</p>
-                    </div>
-                    <a href="https://github.com/mohammad-uzaif/My-portfolio" target="_blank"
-                        class="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest border border-chrome/20 px-5 py-2.5 rounded-full hover:bg-chrome hover:text-obsidian transition-all shrink-0 text-chrome">
-                        <i class="fa-brands fa-github text-lg"></i> Repo
-                    </a>
-                </div>
-
-                <!-- Weather Dashboard -->
-                <div
-                    class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-chrome/5 pb-6 group">
-                    <div>
-                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">
-                            Weather Dashboard</h4>
-                        <p class="text-sm text-muted mt-2 leading-relaxed">{working phase} A responsive dashboard
-                            pulling real-time
-                            data via API to display weather conditions globally.</p>
-                    </div>
-                    <a href="https://github.com/mohammad-uzaif" target="_blank"
-                        class="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest border border-chrome/20 px-5 py-2.5 rounded-full hover:bg-chrome hover:text-obsidian transition-all shrink-0 text-chrome">
-                        <i class="fa-brands fa-github text-lg"></i> Repo
-                    </a>
-                </div>
-
-                <!-- Task Management App -->
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 group">
-                    <div>
-                        <h4 class="font-display text-xl font-bold text-chrome group-hover:glow-text transition-all">Task
-                            Management App</h4>
-                        <p class="text-sm text-muted mt-2 leading-relaxed">{working phase} A full CRUD application
-                            allowing users to
-                            track, edit, and organize daily tasks seamlessly.</p>
-                    </div>
-                    <a href="https://github.com/mohammad-uzaif" target="_blank"
-                        class="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest border border-chrome/20 px-5 py-2.5 rounded-full hover:bg-chrome hover:text-obsidian transition-all shrink-0 text-chrome">
-                        <i class="fa-brands fa-github text-lg"></i> Repo
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <main class="relative z-10 container mx-auto px-6 md:px-12 lg:px-24">
-
-        <section id="about" class="min-h-screen flex flex-col justify-center pt-20">
-            <div class="w-full max-w-5xl">
-                <div class="flex flex-wrap items-center gap-3 md:gap-4 mb-10">
-                    <div
-                        class="flex items-center gap-2 text-xs font-mono text-muted uppercase tracking-widest mr-2 md:mr-4">
-                        <i class="fa-solid fa-location-crosshairs text-chrome animate-pulse"></i>
-                        <span>Hyderabad, India</span>
+    <main class="relative z-10 w-full">
+        
+        <!-- Hero Section -->
+        <section id="about" class="min-h-screen flex items-center pt-24 pb-12 px-6">
+            <div class="max-w-6xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Left Content -->
+                <div class="space-y-8 reveal-up">
+                    <!-- Status Badge -->
+                    <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel">
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        </span>
+                        <span class="text-xs font-semibold tracking-wide text-slate-700 dark:text-slate-300">Available for Opportunities</span>
                     </div>
 
-                    <div class="glass-float px-4 py-1.5 rounded-full flex items-center gap-3 border border-chrome/20">
-                        <div class="relative flex h-2 w-2">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-chrome opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-chrome"></span>
+                    <!-- Main Heading -->
+                    <div class="space-y-2">
+                        <h2 class="text-xl md:text-2xl text-slate-500 dark:text-slate-400 font-medium">Hello, I'm</h2>
+                        <h1 class="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-none tracking-tight text-slate-900 dark:text-white">
+                            Mohammad <br>
+                            <span class="text-brand-600 dark:text-brand-400">Uzaif.</span>
+                        </h1>
+                    </div>
+
+                    <p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed border-l-4 border-brand-500 pl-6 py-1 bg-gradient-to-r from-brand-50 to-transparent dark:from-brand-900/20 rounded-r">
+                        Computer Science Engineering student bridging the gap between elegant design and robust system architecture. Focused on building scalable solutions.
+                    </p>
+
+                    <!-- Quick Links & Location -->
+                    <div class="flex flex-wrap items-center gap-4 pt-4">
+                        <a href="#projects" class="px-6 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-medium hover:scale-105 transition-transform shadow-lg shadow-brand-500/20">
+                            Explore Work <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                        
+                        <div class="flex items-center gap-3 glass-panel px-4 py-3 rounded-xl">
+                            <a href="https://github.com/mohammad-uzaif" target="_blank" class="text-slate-600 dark:text-slate-300 hover:text-brand-500 dark:hover:text-brand-400 transition-colors text-xl">
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                            <div class="w-px h-5 bg-slate-300 dark:bg-slate-700"></div>
+                            <a href="https://linkedin.com/in/mohd-uzaif-ansari" target="_blank" class="text-slate-600 dark:text-slate-300 hover:text-brand-500 dark:hover:text-brand-400 transition-colors text-xl">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </a>
                         </div>
-                        <span class="text-xs font-medium tracking-wide text-chrome glow-text">700+ Global
-                            Connections</span>
                     </div>
-
-                    <a href="https://linkedin.com/in/mohd-uzaif-ansari" target="_blank"
-                        class="glass-float px-4 py-1.5 rounded-full border border-chrome/10 hover:bg-chrome hover:text-obsidian transition-all flex items-center gap-2 text-xs font-medium tracking-wide text-chrome">
-                        <i class="fa-brands fa-linkedin-in"></i> LinkedIn
-                    </a>
-                    <a href="https://github.com/mohammad-uzaif" target="_blank"
-                        class="glass-float px-4 py-1.5 rounded-full border border-chrome/10 hover:bg-chrome hover:text-obsidian transition-all flex items-center gap-2 text-xs font-medium tracking-wide text-chrome">
-                        <i class="fa-brands fa-github"></i> GitHub
-                    </a>
-                    <a href="#"
-                        class="bg-chrome text-obsidian px-5 py-1.5 rounded-full hover:bg-transparent hover:text-chrome border border-chrome transition-all flex items-center gap-2 text-xs font-bold tracking-widest uppercase ml-1">
-                        <i class="fa-solid fa-arrow-down"></i> Resume
-                    </a>
                 </div>
 
-                <h1
-                    class="font-display text-5xl md:text-7xl lg:text-[7rem] font-bold leading-[0.9] tracking-tighter mb-6 uppercase text-chrome">
-                    Mohammad<br>Uzaif
-                </h1>
+                <!-- Right Visual / Status Area -->
+                <div class="hidden lg:flex justify-end reveal-up" style="transition-delay: 200ms;">
+                    <div class="glass-panel p-8 rounded-3xl w-full max-w-md relative overflow-hidden group">
+                        <!-- Abstract bg inside panel -->
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-500/20 rounded-full blur-2xl group-hover:bg-brand-500/40 transition-colors duration-500"></div>
+                        
+                        <div class="relative z-10 space-y-6">
+                            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
+                                <h3 class="font-display font-semibold text-slate-800 dark:text-white">System Status</h3>
+                                <i class="fa-solid fa-satellite-dish text-brand-500 animate-pulse"></i>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500 dark:text-slate-400">Location</span>
+                                    <span class="font-medium text-slate-800 dark:text-slate-200"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>Hyderabad, IN</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500 dark:text-slate-400">Education</span>
+                                    <span class="font-medium text-slate-800 dark:text-slate-200 text-right">B.Tech CS<br><span class="text-xs text-slate-400">Dr. APJ Abdul Kalam Univ.</span></span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500 dark:text-slate-400">Languages</span>
+                                    <span class="font-medium text-slate-800 dark:text-slate-200">Eng, Hin, Urd, Per</span>
+                                </div>
+                            </div>
 
-                <p class="text-lg md:text-xl text-muted font-light max-w-2xl leading-relaxed mt-8">
-                    Computer Science Engineering student bridging the gap between elegant design and robust system
-                    architecture. Focused on building scalable solutions.
-                </p>
+                            <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
+                                <div class="flex items-center justify-between bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fa-solid fa-medal text-amber-500 text-xl"></i>
+                                        <div>
+                                            <p class="text-xs font-bold text-slate-800 dark:text-white uppercase">Badminton Champ</p>
+                                            <p class="text-[10px] text-slate-500 dark:text-slate-400">Class 10th & 12th</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
-        <div class="w-full h-px bg-chrome/10 my-16 transition-colors duration-500"></div>
-
-        <section id="expertise" class="py-16">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
-                <div class="lg:col-span-1">
-                    <h2 class="font-display text-2xl font-bold tracking-tight uppercase text-chrome">Expertise</h2>
-                    <p class="text-sm text-muted mt-2">Technologies & Tools</p>
+        <section id="expertise" class="py-24 px-6 relative">
+            <div class="max-w-6xl mx-auto">
+                <div class="mb-16 reveal-up">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">Technical <span class="text-brand-600 dark:text-brand-400">Arsenal</span></h2>
+                    <p class="text-slate-600 dark:text-slate-400 max-w-2xl">Languages, frameworks, and tools I use to build robust and scalable systems.</p>
                 </div>
 
-                <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
-                    <div>
-                        <h3
-                            class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
-                            Languages & DB</h3>
-                        <ul class="space-y-4 font-display text-xl md:text-2xl text-chrome">
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
-                                <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-brands fa-python"></i></span> Python
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Core Languages -->
+                    <div class="glass-panel p-8 rounded-2xl reveal-up group hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-12 h-12 rounded-lg bg-brand-500/10 dark:bg-brand-400/10 flex items-center justify-center text-brand-600 dark:text-brand-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-code text-2xl"></i>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-6 border-b border-slate-200 dark:border-slate-700 pb-4">Languages</h3>
+                        <ul class="space-y-4 text-slate-700 dark:text-slate-300">
+                            <li class="flex items-center gap-4">
+                                <span class="w-8 text-center text-xl opacity-70"><i class="fa-brands fa-python"></i></span>
+                                <span class="font-medium text-glow-hover">Python</span>
                             </li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
-                                <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-brands fa-cuttlefish"></i></span> C & C++
+                            <li class="flex items-center gap-4">
+                                <span class="w-8 text-center text-xl opacity-70"><i class="fa-brands fa-cuttlefish"></i></span>
+                                <span class="font-medium text-glow-hover">C & C++</span>
                             </li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
-                                <span class="w-8 text-center text-muted text-sm"><i class="fa-brands fa-js"></i></span>
-                                JavaScript
+                            <li class="flex items-center gap-4">
+                                <span class="w-8 text-center text-xl opacity-70"><i class="fa-brands fa-js"></i></span>
+                                <span class="font-medium text-glow-hover">JavaScript</span>
                             </li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
-                                <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-brands fa-html5"></i></span> HTML / CSS
-                            </li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
-                                <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-solid fa-database"></i></span> MySQL
+                            <li class="flex items-center gap-4">
+                                <span class="w-8 text-center text-xl opacity-70"><i class="fa-brands fa-html5"></i></span>
+                                <span class="font-medium text-glow-hover">HTML / CSS</span>
                             </li>
                         </ul>
                     </div>
 
-                    <div>
-                        <h3
-                            class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
-                            Workflow</h3>
-                        <ul class="space-y-4 font-display text-xl md:text-2xl text-chrome">
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
-                                <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-brands fa-git-alt"></i></span> Git
+                    <!-- Databases & Frameworks -->
+                    <div class="glass-panel p-8 rounded-2xl reveal-up group hover:-translate-y-2 transition-transform duration-300" style="transition-delay: 100ms;">
+                        <div class="w-12 h-12 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-database text-2xl"></i>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-6 border-b border-slate-200 dark:border-slate-700 pb-4">Data & Design</h3>
+                        <ul class="space-y-4 text-slate-700 dark:text-slate-300">
+                            <li class="flex items-center gap-4">
+                                <span class="w-8 text-center text-xl opacity-70"><i class="fa-solid fa-server"></i></span>
+                                <span class="font-medium text-glow-hover">MySQL</span>
                             </li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
-                                <span class="w-8 text-center text-muted text-sm"><i
-                                        class="fa-brands fa-github"></i></span> GitHub
+                            <li class="flex items-center gap-4">
+                                <span class="w-8 text-center text-xl opacity-70"><i class="fa-solid fa-wind"></i></span>
+                                <span class="font-medium text-glow-hover">Tailwind CSS</span>
                             </li>
-                            <li class="flex items-center gap-4 hover:translate-x-2 transition-transform cursor-default">
-                                <span class="w-8 text-center text-muted text-sm"><i class="fa-solid fa-code"></i></span>
-                                VS Code
+                            <li class="flex items-center gap-4">
+                                <span class="w-8 text-center text-xl opacity-70"><i class="fa-solid fa-cube"></i></span>
+                                <span class="font-medium text-glow-hover">Three.js</span>
                             </li>
                         </ul>
                     </div>
+
+                    <!-- Workflow -->
+                    <div class="glass-panel p-8 rounded-2xl reveal-up group hover:-translate-y-2 transition-transform duration-300" style="transition-delay: 200ms;">
+                        <div class="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-network-wired text-2xl"></i>
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-6 border-b border-slate-200 dark:border-slate-700 pb-4">Workflow</h3>
+                        <ul class="space-y-4 text-slate-700 dark:text-slate-300">
+                            <li class="flex items-center gap-4">
+                                <span class="w-8 text-center text-xl opacity-70"><i class="fa-brands fa-git-alt"></i></span>
+                                <span class="font-medium text-glow-hover">Git Version Control</span>
+                            </li>
+                            <li class="flex items-center gap-4">
+                                <span class="w-8 text-center text-xl opacity-70"><i class="fa-brands fa-github"></i></span>
+                                <span class="font-medium text-glow-hover">GitHub</span>
+                            </li>
+                            <li class="flex items-center gap-4">
+                                <span class="w-8 text-center text-xl opacity-70"><i class="fa-solid fa-laptop-code"></i></span>
+                                <span class="font-medium text-glow-hover">VS Code</span>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </section>
 
-        <div class="w-full h-px bg-chrome/10 my-16 transition-colors duration-500"></div>
+        <section id="projects" class="py-24 px-6">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 reveal-up">
+                    <div>
+                        <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">Selected <span class="text-brand-600 dark:text-brand-400">Works</span></h2>
+                        <p class="text-slate-600 dark:text-slate-400 max-w-xl">A collection of major projects and mini-programs demonstrating my practical skills.</p>
+                    </div>
+                </div>
 
-        <section id="projects" class="py-16">
-            <div class="flex items-end justify-between mb-16">
-                <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight uppercase text-chrome">Selected
-                    Works</h2>
-                <div class="text-xs font-mono text-muted uppercase tracking-widest hidden md:block">Mini & Major
-                    Projects</div>
-            </div>
-
-            <div class="mb-20 group">
-                <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
-                    Major Project</h3>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                    <div
-                        class="w-full aspect-video bg-surface relative overflow-hidden border border-chrome/5 flex items-center justify-center hover:border-chrome/20 transition-all duration-500">
-                        <i
-                            class="fa-solid fa-laptop-code text-6xl text-chrome/10 group-hover:text-chrome/20 group-hover:scale-110 transition-all duration-500"></i>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <a href="https://portfoliouzaif.netlify.app/" target="_blank" rel="noopener noreferrer"
-                                class="text-muted font-mono text-sm tracking-widest bg-obsidian/80 px-4 py-2 rounded border border-chrome/10 backdrop-blur-sm hover:text-white hover:border-chrome/50 transition-all cursor-pointer z-10">
-                                CLICK TO PROJECT PREVIEW
-                            </a>
+                <!-- Major Projects -->
+                <div class="space-y-12">
+                    
+                    <!-- Project 1: Portfolio -->
+                    <div class="glass-panel rounded-3xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0 reveal-up group border border-slate-200/50 dark:border-slate-700/50 hover:border-brand-500/30 transition-colors">
+                        <div class="lg:col-span-7 p-8 md:p-12 flex flex-col justify-center bg-white/40 dark:bg-slate-900/40">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-bold uppercase tracking-wider mb-6 w-fit">
+                                Major Project
+                            </div>
+                            <h3 class="font-display text-3xl font-bold text-slate-900 dark:text-white mb-4 group-hover:text-brand-500 dark:group-hover:text-brand-400 transition-colors">Immersive 3D Portfolio</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                                A comprehensive web application demonstrating scalable logic, responsive layout choices, and elegant glassmorphism UI design. Integrated with Three.js for interactive 3D background rendering.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-8">
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">HTML</span>
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">Tailwind CSS</span>
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">Three.js</span>
+                            </div>
+                            <div class="flex gap-4">
+                                <a href="https://portfoliouzaif.netlify.app/" target="_blank" class="px-6 py-2.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-medium transition-colors shadow-lg shadow-brand-500/20 text-sm flex items-center gap-2">
+                                    View Live <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                                </a>
+                                <a href="https://github.com/mohammad-uzaif/My-portfolio" target="_blank" class="px-6 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition-colors text-sm flex items-center gap-2">
+                                    <i class="fa-brands fa-github"></i> Source
+                                </a>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-5 h-64 lg:h-auto bg-slate-100 dark:bg-slate-900 relative overflow-hidden flex items-center justify-center border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800">
+                            <!-- Placeholder Abstract Art for Project -->
+                            <div class="absolute inset-0 bg-gradient-to-br from-brand-400/20 to-indigo-500/20 group-hover:scale-110 transition-transform duration-700"></div>
+                            <i class="fa-solid fa-cube text-8xl text-slate-300 dark:text-slate-700 group-hover:text-brand-500/50 transition-colors duration-500 z-10 relative animate-float"></i>
                         </div>
                     </div>
-                    <div>
-                        <h4
-                            class="font-display text-3xl md:text-4xl font-bold mb-4 text-chrome group-hover:glow-text transition-all">
-                            My Portfolio</h4>
-                        <p class="text-muted text-lg leading-relaxed mb-6">A comprehensive description of your major
-                            project. Emphasize the scalability, logic, and design choices implemented during
-                            development.</p>
-                        <div class="flex flex-wrap gap-3 mb-8">
-                            <span
-                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">HTML</span>
-                            <span
-                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">CSS
-                                & Tailwind</span>
-                            <span
-                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">JavaScript</span>
+
+                    <!-- Project 2: Tasbeeh -->
+                    <div class="glass-panel rounded-3xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0 reveal-up group border border-slate-200/50 dark:border-slate-700/50 hover:border-brand-500/30 transition-colors">
+                        <div class="order-2 lg:order-1 lg:col-span-5 h-64 lg:h-auto bg-slate-100 dark:bg-slate-900 relative overflow-hidden flex items-center justify-center border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800">
+                             <div class="absolute inset-0 bg-gradient-to-bl from-emerald-400/20 to-brand-500/20 group-hover:scale-110 transition-transform duration-700"></div>
+                             <i class="fa-solid fa-mobile-screen text-8xl text-slate-300 dark:text-slate-700 group-hover:text-emerald-500/50 transition-colors duration-500 z-10 relative animate-float"></i>
                         </div>
-                        <a href="https://github.com/mohammad-uzaif/My-portfolio" target="_blank"
-                            class="inline-flex items-center text-sm font-bold uppercase tracking-widest hover:text-chrome text-muted transition-colors hover-line">
-                            View Source Code <i class="fa-solid fa-arrow-right ml-2"></i>
+                        <div class="order-1 lg:order-2 lg:col-span-7 p-8 md:p-12 flex flex-col justify-center bg-white/40 dark:bg-slate-900/40">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider mb-6 w-fit">
+                                Major Project
+                            </div>
+                            <h3 class="font-display text-3xl font-bold text-slate-900 dark:text-white mb-4 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">Safa Tasbeeh App</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                                A digital Tasbeeh counter designed for seamless spiritual tracking. Built with modern web technologies ensuring a smooth, app-like user experience across all mobile and desktop devices.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-8">
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">HTML</span>
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">CSS</span>
+                                <span class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">JavaScript</span>
+                            </div>
+                            <div class="flex gap-4">
+                                <a href="https://safatasbeeh.netlify.app/" target="_blank" class="px-6 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-medium transition-colors shadow-lg shadow-emerald-500/20 text-sm flex items-center gap-2">
+                                    View Live <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                                </a>
+                                <a href="https://github.com/mohammad-uzaif/Safa-Tasbeeh" target="_blank" class="px-6 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition-colors text-sm flex items-center gap-2">
+                                    <i class="fa-brands fa-github"></i> Source
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mini Projects Grid -->
+                <div class="mt-16 reveal-up">
+                    <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-6 flex items-center gap-3">
+                        <i class="fa-solid fa-flask text-brand-500"></i> Mini Programs / In Dev
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Weather -->
+                        <div class="glass-panel p-6 rounded-2xl group border border-slate-200/50 dark:border-slate-700/50 hover:border-brand-500/30">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-cloud-sun text-xl"></i>
+                                </div>
+                                <span class="text-[10px] font-bold px-2 py-1 bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 rounded uppercase tracking-wider">In Dev</span>
+                            </div>
+                            <h4 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-2">Weather Dashboard</h4>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4 line-clamp-2">A responsive dashboard pulling real-time data via API to display weather conditions globally.</p>
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-200 dark:border-slate-700">
+                                <span class="text-xs text-slate-500 font-mono">JS • API • CSS</span>
+                                <a href="https://github.com/mohammad-uzaif" target="_blank" class="text-slate-400 hover:text-brand-500 transition-colors"><i class="fa-brands fa-github text-lg"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Task Manager -->
+                        <div class="glass-panel p-6 rounded-2xl group border border-slate-200/50 dark:border-slate-700/50 hover:border-brand-500/30">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500 group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-list-check text-xl"></i>
+                                </div>
+                                <span class="text-[10px] font-bold px-2 py-1 bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 rounded uppercase tracking-wider">In Dev</span>
+                            </div>
+                            <h4 class="font-display text-xl font-bold text-slate-900 dark:text-white mb-2">Task Management App</h4>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4 line-clamp-2">A full CRUD application allowing users to track, edit, and organize daily tasks seamlessly.</p>
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-200 dark:border-slate-700">
+                                <span class="text-xs text-slate-500 font-mono">Python • SQL</span>
+                                <a href="https://github.com/mohammad-uzaif" target="_blank" class="text-slate-400 hover:text-brand-500 transition-colors"><i class="fa-brands fa-github text-lg"></i></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="certifications" class="py-24 px-6 relative overflow-hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16 reveal-up">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">Credentials & <span class="text-brand-600 dark:text-brand-400">Certifications</span></h2>
+                    <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Validating skills through official platforms and continuous learning.</p>
+                </div>
+
+                <!-- Horizontal Scroll Container for Certs -->
+                <div class="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory hide-scroll reveal-up" style="scrollbar-width: none;">
+                    
+                    <!-- Cert 1 -->
+                    <div class="snap-center shrink-0 w-[85vw] md:w-[400px] glass-panel rounded-2xl p-6 group cursor-pointer hover:border-brand-500/50">
+                        <div class="w-full aspect-[4/3] bg-slate-100 dark:bg-slate-800 rounded-xl mb-6 relative overflow-hidden flex items-center justify-center border border-slate-200 dark:border-slate-700">
+                             <!-- Fallback icon if image fails/is missing -->
+                             <i class="fa-solid fa-certificate text-6xl text-slate-300 dark:text-slate-600 absolute group-hover:scale-110 transition-transform duration-500"></i>
+                             <!-- Assuming image exists as mentioned in prompt -->
+                             <img src="certificate.png" alt="MSME Certification" class="w-full h-full object-cover relative z-10 opacity-90 group-hover:opacity-100 transition-opacity" onerror="this.style.display='none'">
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white group-hover:text-brand-500 dark:group-hover:text-brand-400 transition-colors">MSME Certification</h3>
+                                <span class="bg-brand-100 text-brand-700 dark:bg-brand-500/20 dark:text-brand-300 text-[10px] font-bold px-2 py-1 rounded">2024</span>
+                            </div>
+                            <p class="text-slate-500 text-sm flex items-center gap-2"><i class="fa-solid fa-building-columns text-xs"></i> Authorized Platform</p>
+                        </div>
+                    </div>
+
+                    <!-- Cert Placeholder 1 -->
+                    <div class="snap-center shrink-0 w-[85vw] md:w-[400px] glass-panel rounded-2xl p-6 group cursor-pointer border-dashed border-2">
+                        <div class="w-full aspect-[4/3] bg-slate-50 dark:bg-slate-800/50 rounded-xl mb-6 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+                             <i class="fa-solid fa-code text-5xl mb-3 group-hover:scale-110 transition-transform"></i>
+                             <span class="text-sm font-medium tracking-widest uppercase">Processing...</span>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-slate-400 dark:text-slate-500 mb-1">Upcoming Certification</h3>
+                            <p class="text-slate-400 text-sm">Advanced Web Development</p>
+                        </div>
+                    </div>
+                     <!-- Cert Placeholder 2 -->
+                     <div class="snap-center shrink-0 w-[85vw] md:w-[400px] glass-panel rounded-2xl p-6 group cursor-pointer border-dashed border-2">
+                        <div class="w-full aspect-[4/3] bg-slate-50 dark:bg-slate-800/50 rounded-xl mb-6 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 transition-colors">
+                             <i class="fa-brands fa-python text-5xl mb-3 group-hover:scale-110 transition-transform"></i>
+                             <span class="text-sm font-medium tracking-widest uppercase">In Progress</span>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-slate-400 dark:text-slate-500 mb-1">Upcoming Certification</h3>
+                            <p class="text-slate-400 text-sm">Backend & Python Data</p>
+                        </div>
+                    </div>
+
+                    <!-- Spacer for scroll end -->
+                    <div class="shrink-0 w-4 md:w-12"></div>
+                </div>
+                <div class="flex justify-center mt-4 text-slate-400 text-sm animate-pulse md:hidden">
+                    <i class="fa-solid fa-arrows-left-right mr-2"></i> Swipe to explore
+                </div>
+            </div>
+        </section>
+
+        <footer class="pt-24 pb-8 px-6 relative border-t border-slate-200 dark:border-slate-800 bg-white/30 dark:bg-slate-950/30 backdrop-blur-md">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-end mb-16">
+                
+                <div>
+                    <h2 class="font-display text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">Let's Build <br><span class="text-brand-600 dark:text-brand-400">Together.</span></h2>
+                    <p class="text-slate-600 dark:text-slate-400 mb-8 max-w-md text-lg">Open to opportunities, collaborations, and discussions on system architecture and design.</p>
+                    
+                    <a href="mailto:mohammaduzaif0111@gmail.com" class="inline-flex items-center gap-3 text-lg font-medium text-slate-900 dark:text-white border-b-2 border-brand-500 pb-1 hover:text-brand-600 dark:hover:text-brand-400 transition-colors mb-12 group">
+                        <i class="fa-regular fa-envelope text-brand-500 group-hover:-translate-y-1 transition-transform"></i> mohammaduzaif0111@gmail.com
+                    </a>
+
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/in/mohd-uzaif-ansari" target="_blank" class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-brand-500 hover:text-white transition-all text-slate-600 dark:text-slate-300 shadow-sm">
+                            <i class="fa-brands fa-linkedin-in text-lg"></i>
+                        </a>
+                        <a href="https://github.com/mohammad-uzaif" target="_blank" class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 transition-all text-slate-600 dark:text-slate-300 shadow-sm">
+                            <i class="fa-brands fa-github text-lg"></i>
+                        </a>
+                        <a href="https://twitter.com/ozaifkie" target="_blank" class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-sky-500 hover:text-white transition-all text-slate-600 dark:text-slate-300 shadow-sm">
+                            <i class="fa-brands fa-x-twitter text-lg"></i>
                         </a>
                     </div>
                 </div>
-            </div>
 
-            <div class="mb-20 group">
-                <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
-                    Major Project</h3>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                    <div
-                        class="w-full aspect-video bg-surface relative overflow-hidden border border-chrome/5 flex items-center justify-center hover:border-chrome/20 transition-all duration-500">
-                        <i
-                            class="fa-solid fa-mobile-screen text-6xl text-chrome/10 group-hover:text-chrome/20 group-hover:scale-110 transition-all duration-500"></i>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <!-- Update the href below with your Safa Tasbeeh App live link -->
-                            <a href="https://safatasbeeh.netlify.app/" target="_blank" rel="noopener noreferrer"
-                                class="text-muted font-mono text-sm tracking-widest bg-obsidian/80 px-4 py-2 rounded border border-chrome/10 backdrop-blur-sm hover:text-white hover:border-chrome/50 transition-all cursor-pointer z-10">
-                                CLICK TO PROJECT PREVIEW
-                            </a>
-                        </div>
-                    </div>
-                    <div>
-                        <h4
-                            class="font-display text-3xl md:text-4xl font-bold mb-4 text-chrome group-hover:glow-text transition-all">
-                            Safa Tasbeeh App</h4>
-                        <p class="text-muted text-lg leading-relaxed mb-6">A digital Tasbeeh counter application
-                            designed for seamless spiritual tracking. Built with modern web technologies ensuring a
-                            smooth user experience across devices.</p>
-                        <div class="flex flex-wrap gap-3 mb-8">
-                            <span
-                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">HTML</span>
-                            <span
-                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">CSS
-                                </span>
-                            <span
-                                class="text-xs font-mono border border-chrome/20 px-4 py-1.5 rounded-full text-muted">JavaScript</span>
-                        </div>
-                        <!-- Update the href below with your Safa Tasbeeh App GitHub link -->
-                        <a href="https://github.com/mohammad-uzaif/Safa-Tasbeeh" target="_blank"
-                            class="inline-flex items-center text-sm font-bold uppercase tracking-widest hover:text-chrome text-muted transition-colors hover-line">
-                            View Source Code <i class="fa-solid fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <h3 class="text-xs font-mono text-muted tracking-widest uppercase mb-6 border-b border-chrome/10 pb-2">
-                    Mini Projects</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                    <div
-                        class="p-8 border border-chrome/5 bg-surface/40 hover:bg-surface hover:border-chrome/20 transition-all duration-300 group flex flex-col justify-between h-full">
-                        <div>
-                            <div class="flex justify-between items-start mb-4">
-                                <i
-                                    class="fa-regular fa-folder text-2xl text-chrome/50 group-hover:text-chrome transition-colors"></i>
-                                <a href="https://github.com/mohammad-uzaif" target="_blank"
-                                    class="text-chrome/50 hover:text-chrome transition-colors"><i
-                                        class="fa-brands fa-github text-xl"></i></a>
+                <div class="md:text-right flex flex-col md:items-end">
+                    <div class="glass-panel p-6 rounded-2xl inline-block text-left w-full md:w-auto">
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">System Metrics</p>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-xs text-slate-400 mb-1">Status</p>
+                                <div class="font-display font-bold flex items-center gap-2 text-slate-900 dark:text-white">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> ONLINE & READY
+                                </div>
                             </div>
-                            <h4 class="font-display text-xl font-bold mb-3 text-chrome">Weather Dashboard</h4>
-                            <p class="text-sm text-muted mb-6 leading-relaxed">{working phase} A responsive dashboard
-                                pulling real-time
-                                data via API to display weather conditions globally.</p>
-                        </div>
-                        <div class="text-xs font-mono text-muted uppercase tracking-wider">JS • API • CSS</div>
-                    </div>
+                            
+                            <div class="h-px w-full bg-slate-200 dark:bg-slate-700"></div>
 
-                    <div
-                        class="p-8 border border-chrome/5 bg-surface/40 hover:bg-surface hover:border-chrome/20 transition-all duration-300 group flex flex-col justify-between h-full">
-                        <div>
-                            <div class="flex justify-between items-start mb-4">
-                                <i
-                                    class="fa-regular fa-folder text-2xl text-chrome/50 group-hover:text-chrome transition-colors"></i>
-                                <a href="https://github.com/mohammad-uzaif" target="_blank"
-                                    class="text-chrome/50 hover:text-chrome transition-colors"><i
-                                        class="fa-brands fa-github text-xl"></i></a>
-                            </div>
-                            <h4 class="font-display text-xl font-bold mb-3 text-chrome">Task Management App</h4>
-                            <p class="text-sm text-muted mb-6 leading-relaxed">{working phase} A full CRUD application
-                                allowing users to
-                                track, edit, and organize daily tasks seamlessly.</p>
-                        </div>
-                        <div class="text-xs font-mono text-muted uppercase tracking-wider">Python • SQL</div>
-                    </div>
-
-                    <div id="open-projects-modal"
-                        class="p-8 border border-chrome/5 bg-surface/20 hover:bg-surface hover:border-chrome/20 transition-all duration-300 group flex flex-col items-center justify-center h-full cursor-pointer min-h-[250px]">
-                        <div
-                            class="w-16 h-16 rounded-full border border-chrome/10 flex items-center justify-center group-hover:bg-chrome group-hover:text-obsidian group-hover:border-chrome transition-all duration-300 mb-4 shadow-[0_0_0_rgba(255,255,255,0)] group-hover:shadow-[0_0_20px_rgba(var(--chrome-rgb),0.3)]">
-                            <i
-                                class="fa-solid fa-plus text-2xl group-hover:rotate-90 transition-transform duration-500"></i>
-                        </div>
-                        <h4
-                            class="font-display text-lg font-bold text-chrome/50 group-hover:text-chrome group-hover:tracking-widest transition-all duration-300 uppercase text-center">
-                            View More</h4>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <div class="w-full h-px bg-chrome/10 my-16 transition-colors duration-500"></div>
-
-        <section id="education" class="py-16">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-12">
-                <div class="lg:col-span-1">
-                    <h2 class="font-display text-2xl font-bold tracking-tight uppercase text-chrome">Academic</h2>
-                    <p class="text-sm text-muted mt-2">Educational Journey</p>
-                </div>
-
-                <div class="lg:col-span-3 flex flex-col">
-
-                    <div
-                        class="group grid grid-cols-1 md:grid-cols-4 gap-4 py-8 border-b border-chrome/5 hover:border-chrome/20 transition-colors">
-                        <div class="text-sm font-mono text-muted md:col-span-1 pt-1">Present</div>
-                        <div class="md:col-span-3">
-                            <h3
-                                class="font-display text-2xl font-semibold mb-2 text-chrome group-hover:glow-text transition-all">
-                                B.Tech in Computer Science</h3>
-                            <a href="https://aktu.ac.in/" target="_blank"
-                                class="inline-flex items-center text-muted hover:text-chrome transition-colors hover-line text-lg">
-                                Dr. APJ Abdul Kalam University <i
-                                    class="fa-solid fa-arrow-up-right-from-square text-xs ml-2 opacity-50"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div
-                        class="group grid grid-cols-1 md:grid-cols-4 gap-4 py-8 border-b border-chrome/5 hover:border-chrome/20 transition-colors">
-                        <div class="text-sm font-mono text-muted md:col-span-1 pt-1">2022</div>
-                        <div class="md:col-span-3">
-                            <h3 class="font-display text-2xl font-semibold mb-2 text-chrome/80">Class 12th
-                                (Intermediate)</h3>
-                            <p class="text-muted text-lg">Dr. Rizvi Learners Academy</p>
-                        </div>
-                    </div>
-
-                    <div
-                        class="group grid grid-cols-1 md:grid-cols-4 gap-4 py-8 border-b border-chrome/5 hover:border-chrome/20 transition-colors">
-                        <div class="text-sm font-mono text-muted md:col-span-1 pt-1">2020</div>
-                        <div class="md:col-span-3">
-                            <h3 class="font-display text-2xl font-semibold mb-2 text-chrome/80">Class 10th (High School)
-                            </h3>
-                            <p class="text-muted text-lg">Dr. Rizvi Learners Academy</p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <div class="w-full h-px bg-chrome/10 my-16 transition-colors duration-500"></div>
-
-        <section id="certifications" class="py-24 relative">
-            <div class="flex items-end justify-between mb-16 relative z-10">
-                <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight uppercase text-chrome">Credentials
-                </h2>
-                <div class="text-xs font-mono text-muted uppercase tracking-widest hidden md:block">Drag / Scroll <i
-                        class="fa-solid fa-arrow-right ml-2"></i></div>
-            </div>
-
-            <div class="w-full relative">
-                <div class="flex overflow-x-auto hide-scroll gap-8 md:gap-12 pb-8 snap-x snap-mandatory">
-
-                    <div class="snap-center shrink-0 w-[85vw] md:w-[450px] group cursor-pointer">
-                        <div
-                            class="w-full aspect-[4/3] bg-surface overflow-hidden mb-6 relative border border-chrome/5">
-
-                            <img src="certificate.png" alt="MSME Certification"
-                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-
-                        </div>
-                        <div>
-                            <h3
-                                class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">
-                                MSME Certification</h3>
-                            <p class="text-muted text-sm font-mono uppercase tracking-widest">Authorized Platform</p>
-                        </div>
-                    </div>
-
-                    <div class="snap-center shrink-0 w-[85vw] md:w-[450px] group cursor-pointer">
-                        <div
-                            class="w-full aspect-[4/3] bg-surface overflow-hidden mb-6 relative border border-chrome/5">
-                            <div class="absolute inset-0 flex items-center justify-center mix-blend-overlay">
-                                <i
-                                    class="fa-solid fa-code text-6xl text-chrome opacity-20 group-hover:scale-110 transition-transform duration-500"></i>
-                            </div>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <p
-                                    class="text-muted font-mono text-sm tracking-widest bg-obsidian/60 px-4 py-2 rounded backdrop-blur">
-                                    [ CERTIFICATE 2 ]</p>
+                            <div>
+                                <p class="text-xs text-slate-400 mb-1">Unique Connections</p>
+                                <div class="font-display text-3xl font-bold text-brand-600 dark:text-brand-400">
+                                    <span id="visitor-count">700</span>+
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <h3
-                                class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">
-                                Nill</h3>
-                            <p class="text-muted text-sm font-mono uppercase tracking-widest">will be updated</p>
-                        </div>
-                    </div>
-
-                    <div class="snap-center shrink-0 w-[85vw] md:w-[450px] group cursor-pointer">
-                        <div
-                            class="w-full aspect-[4/3] bg-surface overflow-hidden mb-6 relative border border-chrome/5">
-                            <div class="absolute inset-0 flex items-center justify-center mix-blend-overlay">
-                                <i
-                                    class="fa-brands fa-python text-6xl text-chrome opacity-20 group-hover:scale-110 transition-transform duration-500"></i>
-                            </div>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <p
-                                    class="text-muted font-mono text-sm tracking-widest bg-obsidian/60 px-4 py-2 rounded backdrop-blur">
-                                    [ CERTIFICATE 3 ]</p>
-                            </div>
-                        </div>
-                        <div>
-                            <h3
-                                class="font-display text-2xl font-bold mb-1 text-chrome/80 group-hover:text-chrome transition-colors">
-                                Nill</h3>
-                            <p class="text-muted text-sm font-mono uppercase tracking-widest">Will be updated</p>
-                        </div>
-                    </div>
-
-                    <div class="shrink-0 w-[10vw] md:w-[10px]"></div>
-
-                </div>
-            </div>
-        </section>
-
-        <div class="w-full h-px bg-chrome/10 my-8 transition-colors duration-500"></div>
-
-        <section class="py-16">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-
-                <div>
-                    <h2 class="text-xs font-mono text-muted tracking-widest uppercase mb-8">Linguistics</h2>
-                    <ul class="space-y-6">
-                        <li class="flex items-end justify-between border-b border-chrome/5 pb-2">
-                            <span class="font-display text-2xl text-chrome">English</span>
-                            <span class="text-xs text-muted font-mono tracking-widest">FLUENT</span>
-                        </li>
-                        <li class="flex items-end justify-between border-b border-chrome/5 pb-2">
-                            <span class="font-display text-2xl text-chrome">Hindi</span>
-                            <span class="text-xs text-muted font-mono tracking-widest">FLUENT</span>
-                        </li>
-                        <li class="flex items-end justify-between border-b border-chrome/5 pb-2">
-                            <span class="font-display text-2xl text-chrome">Urdu</span>
-                            <span class="text-xs text-muted font-mono tracking-widest">FLUENT</span>
-                        </li>
-                        <li class="flex items-end justify-between border-b border-chrome/5 pb-2">
-                            <span class="font-display text-2xl text-chrome/60">Persian</span>
-                            <span class="text-xs text-muted font-mono tracking-widest">UNDERSTAND</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h2 class="text-xs font-mono text-muted tracking-widest uppercase mb-8">Outside The Context</h2>
-                    <div class="group relative">
-                        <h3
-                            class="font-display text-4xl mb-4 text-chrome hover:glow-text transition-all cursor-default">
-                            Badminton</h3>
-                        <p class="text-muted leading-relaxed max-w-sm">
-                            Competitive athlete. Secured champion titles during both Class 10th and 12th. Precision,
-                            agility, and strategy applied off the screen.
-                        </p>
-                        <div
-                            class="absolute top-0 right-10 text-8xl text-chrome/[0.02] group-hover:text-chrome/[0.05] transition-colors -z-10 font-display font-bold">
-                            01
-                        </div>
                     </div>
                 </div>
 
             </div>
-        </section>
-
-        <footer
-            class="mt-24 pb-12 pt-12 border-t border-chrome/10 flex flex-col md:flex-row justify-between items-end gap-12 transition-colors duration-500">
-
-            <div class="w-full md:w-auto">
-                <h2 class="font-display text-5xl font-bold mb-6 text-chrome">Let's Talk.</h2>
-                <div class="flex gap-4">
-                    <a href="https://linkedin.com/in/mohd-uzaif-ansari" target="_blank"
-                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </a>
-                    <a href="https://github.com/mohammad-uzaif" target="_blank"
-                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
-                        <i class="fa-brands fa-github"></i>
-                    </a>
-                    <a href="https://twitter.com/ozaifkie" target="_blank"
-                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
-                        <i class="fa-brands fa-x-twitter"></i>
-                    </a>
-                    <a href="https://facebook.com/" target="_blank"
-                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </a>
-                    <a href="https://instagram.com/ozaifkie" target="_blank"
-                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-                    <a href="mailto:mohammaduzaif0111@gmail.com"
-                        class="w-10 h-10 flex items-center justify-center rounded-full border border-chrome/20 hover:bg-chrome hover:text-obsidian transition-all text-chrome">
-                        <i class="fa-regular fa-envelope"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="text-right flex flex-col items-end">
-                <span class="text-xs font-mono text-muted uppercase tracking-widest mb-2">Unique Views</span>
-                <div class="font-display text-3xl font-bold flex items-center gap-3 text-chrome">
-                    <span id="visitor-count">----</span>
-                    <span class="relative flex h-3 w-3">
-                        <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-chrome opacity-40"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-chrome"></span>
-                    </span>
-                </div>
+            
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center pt-8 border-t border-slate-200 dark:border-slate-800 text-sm text-slate-500">
+                <p>&copy; <span id="year"></span> Mohammad Uzaif. All rights reserved.</p>
+                <p class="mt-2 md:mt-0 flex items-center gap-2">Built with <i class="fa-solid fa-heart text-red-500 text-xs"></i> & Three.js</p>
             </div>
         </footer>
 
     </main>
 
     <script>
+        // Set Current Year
+        document.getElementById('year').innerText = new Date().getFullYear();
+
         // --- Theme Toggle Logic ---
         const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-
-        // Initialize Theme Based on Local Storage
-        const savedTheme = localStorage.getItem('uzaifTheme') || 'dark';
-        if (savedTheme === 'light') {
-            document.body.classList.add('light-mode');
-            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        const htmlElement = document.documentElement;
+        
+        // Check local storage or system preference
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
         }
 
         themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
-
-            const isLight = document.body.classList.contains('light-mode');
-            localStorage.setItem('uzaifTheme', isLight ? 'light' : 'dark');
-
-            // Toggle Icon and animate rotation
-            themeIcon.style.transform = 'rotate(180deg) scale(0)';
-
-            setTimeout(() => {
-                if (isLight) {
-                    themeIcon.classList.replace('fa-moon', 'fa-sun');
-                } else {
-                    themeIcon.classList.replace('fa-sun', 'fa-moon');
-                }
-                themeIcon.style.transform = 'rotate(360deg) scale(1)';
-
-                // Reset transform later to allow future animations
-                setTimeout(() => { themeIcon.style.transform = ''; }, 500);
-            }, 250);
-
-            // Update 3D Background Colors
-            if (window.updateThreeJSTheme) {
-                window.updateThreeJSTheme(isLight);
-            }
+            htmlElement.classList.toggle('dark');
+            const isDark = htmlElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            // Dispatch event for Three.js to pick up color changes
+            window.dispatchEvent(new Event('themeChanged'));
         });
+
+        // --- Mobile Menu Logic ---
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-mobile-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            const isOpen = !mobileMenu.classList.contains('pointer-events-none');
+            if (isOpen) {
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = '';
+            } else {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+        closeBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+        // --- Scroll Reveal Animation ---
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal-up");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal(); // Trigger initially
 
         // --- Loader Logic ---
         window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
             setTimeout(() => {
+                const loader = document.getElementById('loader');
                 loader.style.opacity = '0';
                 setTimeout(() => {
                     loader.style.visibility = 'hidden';
                     initThreeJS();
                 }, 800);
-            }, 1200); // Give time for the text reveal animation
+            }, 1000);
         });
 
-        // --- Mobile Menu Toggle Logic ---
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
-        let isMenuOpen = false;
-
-        function toggleMenu() {
-            isMenuOpen = !isMenuOpen;
-            if (isMenuOpen) {
-                mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
-                mobileMenu.classList.add('opacity-100', 'pointer-events-auto');
-                mobileMenuBtn.innerHTML = '<i class="fa-solid fa-xmark text-lg"></i>';
-                document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+        // --- Sticky Navbar ---
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('py-2');
+                nav.firstElementChild.classList.add('shadow-lg', 'border', 'border-slate-200', 'dark:border-slate-700', 'dark:bg-slate-900/80', 'bg-white/80');
+                nav.firstElementChild.classList.remove('py-3');
             } else {
-                mobileMenu.classList.add('opacity-0', 'pointer-events-none');
-                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto');
-                mobileMenuBtn.innerHTML = '<i class="fa-solid fa-bars text-lg"></i>';
-                document.body.style.overflow = '';
+                nav.classList.remove('py-2');
+                nav.firstElementChild.classList.remove('shadow-lg', 'border', 'border-slate-200', 'dark:border-slate-700', 'dark:bg-slate-900/80', 'bg-white/80');
+                nav.firstElementChild.classList.add('py-3');
             }
-        }
+        });
 
-        mobileMenuBtn.addEventListener('click', toggleMenu);
-        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
-
-        // --- Projects Modal Logic ---
-        const openProjectsModalBtn = document.getElementById('open-projects-modal');
-        const closeProjectsModalBtn = document.getElementById('close-projects-modal');
-        const projectsModal = document.getElementById('projects-modal');
-        const projectsModalContent = document.getElementById('projects-modal-content');
-
-        function openProjectsModal() {
-            projectsModal.classList.remove('opacity-0', 'pointer-events-none');
-            projectsModalContent.classList.remove('scale-95');
-            projectsModalContent.classList.add('scale-100');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        }
-
-        function closeProjectsModal() {
-            projectsModal.classList.add('opacity-0', 'pointer-events-none');
-            projectsModalContent.classList.remove('scale-100');
-            projectsModalContent.classList.add('scale-95');
-            document.body.style.overflow = ''; // Restore scrolling
-        }
-
-        if (openProjectsModalBtn && closeProjectsModalBtn && projectsModal) {
-            openProjectsModalBtn.addEventListener('click', openProjectsModal);
-            closeProjectsModalBtn.addEventListener('click', closeProjectsModal);
-
-            // Close when clicking outside the content box
-            projectsModal.addEventListener('click', (e) => {
-                if (e.target === projectsModal) {
-                    closeProjectsModal();
-                }
-            });
-        }
-
-        // --- Visitor Counter ---
-        function updateVisitorCount() {
-            let count = localStorage.getItem('uzaifPortfolioViews');
-            if (!count) {
-                count = 1432; // Aesthetic baseline
-            } else {
-                count = parseInt(count) + 1;
-            }
-            localStorage.setItem('uzaifPortfolioViews', count);
-
-            // Format to look like a digital gauge e.g. 001,432
-            const formatted = count.toString().padStart(6, '0').replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            document.getElementById('visitor-count').innerText = formatted;
-        }
-        updateVisitorCount();
-
-        // --- Three.js Abstract Constellation Background ---
+        // --- Three.js Professional Background Simulation ---
         function initThreeJS() {
-            const container = document.getElementById('canvas-container');
+            const container = document.getElementById('webgl-container');
             const scene = new THREE.Scene();
+            
+            // Fog for depth
+            const isDarkInit = document.documentElement.classList.contains('dark');
+            scene.fog = new THREE.FogExp2(isDarkInit ? 0x020617 : 0xf8fafc, 0.002);
 
-            // Camera setup to view the flat-ish network
-            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 250;
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            // Move camera down slightly to accommodate fixed header
+            camera.position.z = 30;
+            camera.position.y = -5;
 
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Optimize performance
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             container.appendChild(renderer.domElement);
 
-            // Particles
-            const particleCount = 400; // Less is more elegant
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(particleCount * 3);
-            const velocities = [];
+            // Create a group that will rotate based on scroll
+            const scrollGroup = new THREE.Group();
+            scene.add(scrollGroup);
 
-            // Spread them out in a wide, slightly deep plane
-            for (let i = 0; i < particleCount; i++) {
-                positions[i * 3] = (Math.random() - 0.5) * 800;     // X
-                positions[i * 3 + 1] = (Math.random() - 0.5) * 800; // Y
-                positions[i * 3 + 2] = (Math.random() - 0.5) * 200; // Z depth
+            // Setup Geometry: Abstract Wireframe Landscape / Network
+            
+            // 1. Grid Helper (acts as a floor)
+            const gridColor = isDarkInit ? 0x334155 : 0xCBD5E1; // slate-700 / slate-300
+            const gridHelper = new THREE.GridHelper(200, 50, gridColor, gridColor);
+            gridHelper.position.y = -15;
+            // gridHelper.material.transparent = true;
+            // gridHelper.material.opacity = 0.2;
+            scrollGroup.add(gridHelper);
 
-                // subtle random movement speed
-                velocities.push({
-                    x: (Math.random() - 0.5) * 0.2,
-                    y: (Math.random() - 0.5) * 0.2,
-                    z: (Math.random() - 0.5) * 0.1
-                });
+            // 2. Floating Geometric Nodes (Representing skills/data)
+            const nodes = [];
+            const nodeCount = window.innerWidth < 768 ? 20 : 45;
+            
+            const geomTypes = [
+                new THREE.IcosahedronGeometry(1, 0),
+                new THREE.OctahedronGeometry(1, 0),
+                new THREE.TetrahedronGeometry(1, 0)
+            ];
+
+            const matColor = isDarkInit ? 0x0ea5e9 : 0x0284c7; // brand colors
+            
+            const nodeMaterial = new THREE.MeshBasicMaterial({ 
+                color: matColor, 
+                wireframe: true,
+                transparent: true,
+                opacity: 0.3
+            });
+
+            for(let i=0; i<nodeCount; i++) {
+                const geom = geomTypes[Math.floor(Math.random() * geomTypes.length)];
+                const mesh = new THREE.Mesh(geom, nodeMaterial);
+                
+                // Position randomly in a cylinder shape around camera
+                const theta = Math.random() * Math.PI * 2;
+                const radius = 10 + Math.random() * 40;
+                mesh.position.x = Math.cos(theta) * radius;
+                mesh.position.z = Math.sin(theta) * radius - 20; // push back a bit
+                mesh.position.y = (Math.random() - 0.5) * 60;
+                
+                // Random scale
+                const scale = 0.5 + Math.random() * 2;
+                mesh.scale.set(scale, scale, scale);
+                
+                // Store random rotation speeds
+                mesh.userData = {
+                    rx: (Math.random() - 0.5) * 0.02,
+                    ry: (Math.random() - 0.5) * 0.02
+                };
+
+                nodes.push(mesh);
+                scrollGroup.add(mesh);
             }
 
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            // Listen for theme changes to update colors
+            window.addEventListener('themeChanged', () => {
+                const isDark = document.documentElement.classList.contains('dark');
+                
+                // Update Fog
+                scene.fog.color.setHex(isDark ? 0x020617 : 0xf8fafc);
+                
+                // Update Grid
+                const newGridColor = isDark ? 0x334155 : 0xCBD5E1;
+                gridHelper.material.color.setHex(newGridColor);
+                // gridHelper.material.needsUpdate = true; // Not strictly needed for color change, but good practice if structure changes
 
-            // Minimalist points
-            const isInitiallyLight = document.body.classList.contains('light-mode');
-            const particleColor = isInitiallyLight ? 0x000000 : 0xffffff;
-
-            const material = new THREE.PointsMaterial({
-                color: particleColor,
-                size: 1.5,
-                transparent: true,
-                opacity: 0.6
+                // Update Nodes
+                nodeMaterial.color.setHex(isDark ? 0x0ea5e9 : 0x0284c7);
+                nodeMaterial.opacity = isDark ? 0.3 : 0.4;
             });
 
-            const particles = new THREE.Points(geometry, material);
-            scene.add(particles);
-
-            // Lines connecting close particles
-            const lineMaterial = new THREE.LineBasicMaterial({
-                color: particleColor,
-                transparent: true,
-                opacity: 0.1
-            });
-
-            const lineGeometry = new THREE.BufferGeometry();
-            const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
-            scene.add(linesMesh);
-
-            // Export function to update colors on theme switch
-            window.updateThreeJSTheme = function (isLight) {
-                const color = isLight ? 0x000000 : 0xffffff;
-                material.color.setHex(color);
-                lineMaterial.color.setHex(color);
-            };
-
-            // Mouse Interaction for subtle parallax
+            // Parallax Interaction
             let mouseX = 0;
             let mouseY = 0;
             let targetX = 0;
@@ -1020,64 +869,47 @@
             const windowHalfY = window.innerHeight / 2;
 
             document.addEventListener('mousemove', (event) => {
-                mouseX = (event.clientX - windowHalfX) * 0.05;
-                mouseY = (event.clientY - windowHalfY) * 0.05;
+                mouseX = (event.clientX - windowHalfX);
+                mouseY = (event.clientY - windowHalfY);
             });
 
             // Animation Loop
+            const clock = new THREE.Clock();
+
             function animate() {
                 requestAnimationFrame(animate);
+                const elapsedTime = clock.getElapsedTime();
 
-                // Update particle positions
-                const positions = particles.geometry.attributes.position.array;
+                // Rotate individual nodes
+                nodes.forEach(node => {
+                    node.rotation.x += node.userData.rx;
+                    node.rotation.y += node.userData.ry;
+                    // gentle bobbing
+                    node.position.y += Math.sin(elapsedTime * 2 + node.position.x) * 0.01;
+                });
 
-                // Array to hold dynamic line segments
-                const linePositions = [];
+                // Scroll Animation logic
+                const scrollY = window.scrollY;
+                // As user scrolls down, move the camera forward (into the scene) and rotate slightly
+                camera.position.z = 30 - (scrollY * 0.01);
+                scrollGroup.rotation.y = scrollY * 0.001;
 
-                for (let i = 0; i < particleCount; i++) {
-                    // Move
-                    positions[i * 3] += velocities[i].x;
-                    positions[i * 3 + 1] += velocities[i].y;
-                    positions[i * 3 + 2] += velocities[i].z;
-
-                    // Bounds check to keep them from flying away
-                    if (positions[i * 3] < -400 || positions[i * 3] > 400) velocities[i].x *= -1;
-                    if (positions[i * 3 + 1] < -400 || positions[i * 3 + 1] > 400) velocities[i].y *= -1;
-                    if (positions[i * 3 + 2] < -100 || positions[i * 3 + 2] > 100) velocities[i].z *= -1;
-
-                    // Check distances for lines (O(n^2) simple approach, optimized by low particle count)
-                    for (let j = i + 1; j < particleCount; j++) {
-                        const dx = positions[i * 3] - positions[j * 3];
-                        const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
-                        const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
-                        const distSq = dx * dx + dy * dy + dz * dz;
-
-                        // If close enough, draw a line segment
-                        if (distSq < 3000) {
-                            linePositions.push(
-                                positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2],
-                                positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]
-                            );
-                        }
-                    }
-                }
-
-                particles.geometry.attributes.position.needsUpdate = true;
-
-                // Update Lines
-                linesMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
-
-                // Smooth Camera Parallax Pan
-                targetX = mouseX;
-                targetY = mouseY;
-                camera.position.x += (targetX - camera.position.x) * 0.02;
-                camera.position.y += (-targetY - camera.position.y) * 0.02;
-                camera.lookAt(scene.position);
+                // Mouse Parallax effect (smooth easing)
+                targetX = mouseX * 0.005;
+                targetY = mouseY * 0.005;
+                
+                // Move camera based on mouse, but keep base position influenced by scroll
+                camera.position.x += (targetX - camera.position.x) * 0.05;
+                // keep base Y at -5
+                camera.position.y += ((-targetY - 5) - camera.position.y) * 0.05;
+                
+                // Look towards center slightly offset by mouse
+                camera.lookAt(targetX * 0.5, targetY * 0.5, -20);
 
                 renderer.render(scene, camera);
             }
 
-            // Handle Resize
+            // Resize Handler
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
@@ -1088,5 +920,4 @@
         }
     </script>
 </body>
-
 </html>

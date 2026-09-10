@@ -1,674 +1,469 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio | Dreamy & Glassmorphic</title>
-    
-    <!-- Tailwind CSS for rapid styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: 'Outfit' for dreamy/modern headings, 'Inter' for clean body text -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    
-    <!-- Phosphor Icons for elegant line icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Mohammad Uzaif Ansari — Computer Science Engineer portfolio." />
+  <title>Mohammad Uzaif Ansari — Portfolio</title>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Outfit', 'sans-serif'],
-                    },
-                    colors: {
-                        // Custom violet shades matching your request
-                        violet: {
-                            50: '#f5f3ff',
-                            100: '#ede9fe',
-                            200: '#ddd6fe',
-                            300: '#c4b5fd',
-                            400: '#a78bfa',
-                            500: '#8b5cf6',
-                            600: '#7c3aed', // Primary violet
-                            700: '#6d28d9',
-                            800: '#5b21b6',
-                            900: '#4c1d95',
-                        }
-                    },
-                    animation: {
-                        'blob': 'blob 7s infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        },
-                        'pulse-glow': {
-                            '0%, 100%': { opacity: 1, boxShadow: '0 0 0 0 rgba(124, 58, 237, 0.7)' },
-                            '50%': { opacity: .8, boxShadow: '0 0 0 15px rgba(124, 58, 237, 0)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+  <!-- Google Fonts: change these in one place if you want another typography system -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-    <style>
-        /* Custom CSS for elements that Tailwind doesn't cover natively out-of-the-box perfectly */
-        
-        body {
-            /* The requested grey grid background */
-            background-color: var(--bg-color, #f8fafc);
-            background-image: 
-                linear-gradient(to right, rgba(0, 0, 0, var(--grid-opacity, 0.03)) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0, 0, 0, var(--grid-opacity, 0.03)) 1px, transparent 1px);
-            background-size: 40px 40px;
-            color: var(--text-color, #0f172a); /* Black/Dark slate text */
-            overflow-x: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        /* Dark Mode Variables */
-        body.dark-mode {
-            --bg-color: #0f172a;
-            --text-color: #f1f5f9;
-            --grid-opacity: 0.1;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-shadow: rgba(0, 0, 0, 0.3);
-            --heading-color: #ffffff;
-            --text-muted: #94a3b8;
-            --card-bg: rgba(15, 23, 42, 0.6);
-            background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, var(--grid-opacity)) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, var(--grid-opacity)) 1px, transparent 1px);
-        }
-
-        .glass-panel {
-            background: var(--glass-bg, rgba(255, 255, 255, 0.4));
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.5));
-            box-shadow: 0 8px 32px 0 var(--glass-shadow, rgba(31, 38, 135, 0.05));
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .glass-button {
-            background: var(--glass-bg, rgba(255, 255, 255, 0.6));
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.8));
-            transition: all 0.3s ease;
-            color: inherit;
-        }
-        
-        .glass-button:hover {
-            background: var(--glass-bg, rgba(255, 255, 255, 0.9));
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2);
-        }
-
-        body.dark-mode .glass-button:hover {
-            background: rgba(30, 41, 59, 0.9);
-        }
-
-        /* 3D Card base styling */
-        .tilt-card {
-            transform-style: preserve-3d;
-            transform: perspective(1000px);
-        }
-        
-        .tilt-card-inner {
-            transform: translateZ(30px); /* Pushes content out for 3D effect */
-            background: var(--card-bg, rgba(255, 255, 255, 0.4));
-            border-color: var(--glass-border, rgba(255, 255, 255, 0.5));
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-
-        /* Liquid Switch styling (Apple-style slider) */
-        .liquid-switch {
-            position: relative;
-            background: var(--glass-bg, rgba(255, 255, 255, 0.5));
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.8));
-            border-radius: 9999px;
-            padding: 4px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-
-        .liquid-switch-thumb {
-            position: absolute;
-            height: calc(100% - 8px);
-            width: 50%;
-            background: var(--text-color, white);
-            border-radius: 9999px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5);
-            transition: transform 0.4s cubic-bezier(0.85, 0.05, 0.18, 1.35); /* Bouncy liquid feel */
-            z-index: 1;
-        }
-
-        body.dark-mode .liquid-switch-thumb {
-            background: #334155;
-        }
-
-        .liquid-switch.active .liquid-switch-thumb {
-            transform: translateX(calc(100% - 8px));
-        }
-
-        .liquid-switch span {
-            position: relative;
-            z-index: 2;
-            flex: 1;
-            text-align: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        /* Scroll Reveal Utility Classes */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Custom Violet Gradient Text */
-        .text-gradient-violet {
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-image: linear-gradient(135deg, var(--text-color, #000000) 0%, #7c3aed 100%);
-            transition: background-image 0.3s ease;
-        }
-
-        body.dark-mode .text-gradient-violet {
-            background-image: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
-        }
-        
-        .heading-text {
-            color: var(--heading-color, #000000);
-            transition: color 0.3s ease;
-        }
-        
-        .muted-text {
-            color: var(--text-muted, #4b5563);
-            transition: color 0.3s ease;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 4px;
-        }
-        .dot-green {
-            background-color: #22c55e;
-            box-shadow: 0 0 8px #22c55e;
-            animation: pulse-dot 2s infinite;
-        }
-        .dot-red {
-            background-color: #ef4444;
-        }
-        
-        @keyframes pulse-dot {
-            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-        }
-    </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="antialiased font-sans relative transition-colors duration-300">
-
-    <!-- Dreamy background blurred blobs to give the 'cozy' vibe -->
-    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-violet-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob dark:opacity-20"></div>
-        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-fuchsia-300 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob animation-delay-2000 dark:opacity-20"></div>
-        <div class="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-[128px] opacity-40 animate-blob animation-delay-4000 dark:opacity-20"></div>
+<body>
+  <!-- =========================================================
+       PAGE LOADER
+       JS removes .loading from body after the page is ready.
+  ========================================================== -->
+  <div class="page-loader" id="pageLoader" aria-label="Loading portfolio">
+    <div class="loader-core">
+      <span>UZ</span>
+      <div class="loader-line"></div>
+      <small>building ideas...</small>
     </div>
+  </div>
 
-    <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 glass-panel rounded-full px-6 py-3 flex justify-between items-center transition-all duration-300" id="navbar">
-        <!-- LOGO: Edit your name here -->
-        <a href="#" class="font-heading font-bold text-xl tracking-tight heading-text flex items-center gap-2">
-            <span class="w-8 h-8 rounded-full bg-violet-600 text-white flex items-center justify-center text-sm">M</span>
-            Mohd Uzaif.
-        </a>
+  <!-- =========================================================
+       FIXED GLASS NAVIGATION
+  ========================================================== -->
+  <header class="site-header" id="siteHeader">
+    <a class="brand-mark magnetic" href="#top" aria-label="Uzaif home">
+      <span class="brand-dot"></span>
+      <span>uzaif<span class="brand-accent">.</span></span>
+    </a>
 
-        <!-- Desktop Navigation Links -->
-        <div class="hidden md:flex items-center gap-8 text-sm font-medium muted-text">
-            <a href="#home" class="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Home</a>
-            <a href="#projects" class="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Projects</a>
-            <a href="#skills" class="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Skills</a>
-            <a href="#certifications" class="hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Certifications</a>
-        </div>
-
-        <!-- Right Side: Clock, Dark Mode & Mobile Menu Toggle -->
-        <div class="flex items-center gap-4">
-            <!-- Dark Mode Toggle -->
-            <button id="theme-toggle" class="glass-button w-8 h-8 rounded-full flex items-center justify-center heading-text hover:text-violet-600 transition-colors" aria-label="Toggle Dark Mode">
-                <i class="ph-fill ph-moon" id="theme-icon"></i>
-            </button>
-
-            <!-- Live Clock Element -->
-            <div class="hidden sm:flex items-center gap-2 glass-button px-3 py-1.5 rounded-full text-xs font-semibold text-violet-900 dark:text-violet-300">
-                <i class="ph-fill ph-clock text-violet-600 dark:text-violet-400"></i>
-                <span id="live-clock">00:00:00 AM</span>
-            </div>
-            
-            <!-- Mobile Menu Icon (Decorative for this single page) -->
-            <button class="md:hidden text-2xl heading-text">
-                <i class="ph ph-list"></i>
-            </button>
-        </div>
+    <nav class="nav-panel" aria-label="Primary navigation">
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#contact">Connect</a>
     </nav>
 
-    <section id="home" class="min-h-screen flex flex-col justify-center items-center relative pt-24 px-4 sm:px-8">
-        
-        <div class="max-w-4xl mx-auto w-full flex flex-col items-center text-center z-10 reveal">
-            
-            <!-- Liquid Status Switch (Hired vs Open to Work) -->
-            <div class="mb-8 flex flex-col items-center gap-2">
-                <span class="text-xs uppercase tracking-widest muted-text font-semibold mb-1">Current Status</span>
-                <div class="liquid-switch w-64 h-10" id="statusSwitch" onclick="toggleStatus()">
-                    <div class="liquid-switch-thumb" id="switchThumb"></div>
-                    <span id="status-left" class="heading-text"><span class="status-dot dot-red" id="dot-left"></span>Hired</span>
-                    <span id="status-right" class="muted-text"><span class="status-dot dot-green" id="dot-right" style="opacity: 0;"></span>Open to Work</span>
-                </div>
-            </div>
+    <div class="nav-right">
+      <span class="global-chip">
+        <span class="status-pulse"></span>
+        1000+ connections
+      </span>
+      <button class="browse-btn magnetic" id="browseBtn" type="button">
+        Browse <span>↗</span>
+      </button>
+    </div>
 
-            <!-- Main Heading (Typography focus: Black & Violet) -->
-            <h1 class="font-heading text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tight mb-6 heading-text">
-                Designing <br class="hidden md:block">
-                <span class="text-gradient-violet relative inline-block">
-                    Dreamy Digital
-                    <!-- Small decorative underline -->
-                    <svg class="absolute w-full h-4 -bottom-1 left-0 text-violet-400 opacity-50" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00021 6.99982C47.255 1.55452 133.5 -2.49982 198.5 6.99982" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
-                </span> 
-                <br class="hidden md:block"> Experiences.
-            </h1>
+    <div class="browse-menu" id="browseMenu">
+      <div class="browse-title">Jump to</div>
+      <a href="#projects">01 / Projects</a>
+      <a href="#skills">02 / Skills</a>
+      <a href="#certifications">03 / Certifications</a>
+      <a href="#education">04 / Education</a>
+      <a href="#contact">05 / Connect</a>
+    </div>
+  </header>
 
-            <p class="text-lg md:text-xl muted-text max-w-2xl mb-10 font-light leading-relaxed">
-                Hello, I'm <strong class="font-semibold heading-text">Mohd Uzaif Ansari</strong>. A passionate Web Developer & Graphic Designer bringing ideas to life. From designing cozy interfaces to building robust backends, I aspire to weave AI into everyday digital magic.
-            </p>
+  <main id="top">
+    <!-- =======================================================
+         HERO
+    ======================================================== -->
+    <section class="hero section-shell">
+      <div class="hero-grid">
+        <aside class="hero-rail left-rail">
+          <span class="rail-kicker">CSE / 2026</span>
+          <span class="rail-line"></span>
+          <span class="vertical-text">CODE • LEARN • CREATE</span>
+        </aside>
 
-            <!-- Animated Resume Button -->
-            <!-- EDIT: Change the href to link to your actual resume file -->
-            <a href="#" class="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-violet-600 rounded-full hover:bg-violet-700 animate-pulse-glow shadow-[0_8px_30px_rgb(124,58,237,0.3)] hover:scale-105 border border-violet-500/50">
-                <span class="mr-2">Grab My Resume</span>
-                <i class="ph-bold ph-download-simple group-hover:animate-bounce"></i>
+        <div class="hero-content">
+          <div class="availability-pill reveal">
+            <span class="availability-dot"></span>
+            Open to work
+            <span class="availability-copy">Available for internships & fresher roles</span>
+          </div>
+
+          <p class="eyebrow reveal">Mohammad Uzaif Ansari</p>
+          <h1 class="hero-title reveal">
+            Building <span class="outline-word">useful</span><br />
+            digital experiences<span class="hero-dot">.</span>
+          </h1>
+
+          <p class="hero-description reveal">
+            Computer Science Engineering student focused on web development, AI/ML,
+            clean interfaces and projects that solve practical problems.
+          </p>
+
+          <div class="hero-actions reveal">
+            <a class="btn btn-primary magnetic" href="#projects">
+              Explore my work <span>↘</span>
             </a>
-
-            <!-- Scroll Down Indicator -->
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-float muted-text text-3xl">
-                <i class="ph-light ph-caret-down"></i>
-            </div>
-        </div>
-    </section>
-
-    <section id="projects" class="py-24 px-4 sm:px-8 max-w-7xl mx-auto">
-        <div class="mb-16 text-center reveal">
-            <h2 class="font-heading text-4xl md:text-5xl font-bold heading-text mb-4">Selected <span class="text-violet-600 dark:text-violet-400">Projects</span></h2>
-            <p class="muted-text">A showcase of my recent responsive web creations.</p>
-        </div>
-
-        <!-- Project Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            
-            <!-- PROJECT CARD 1 -->
-            <div class="project-card tilt-card h-96 rounded-3xl p-2 glass-panel group cursor-pointer reveal">
-                <div class="w-full h-full rounded-[1.25rem] overflow-hidden relative tilt-card-inner">
-                    <!-- Project Image Placeholder -->
-                    <img src="https://placehold.co/800x600/e2e8f0/7c3aed?text=Portfolio+Website" alt="Portfolio Website" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700">
-                    
-                    <div class="p-6 relative z-10">
-                        <h3 class="font-heading text-xl font-bold heading-text mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">Personal Portfolio Website</h3>
-                        <p class="text-sm muted-text mb-4 line-clamp-2">A fully responsive, glassmorphic portfolio website showcasing my skills, projects, and educational background with a dreamy aesthetic.</p>
-                        <div class="flex gap-2 flex-wrap">
-                            <span class="text-xs px-2 py-1 rounded-md bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300 font-medium border border-violet-200 dark:border-violet-800">HTML/CSS</span>
-                            <span class="text-xs px-2 py-1 rounded-md bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300 font-medium border border-violet-200 dark:border-violet-800">JavaScript</span>
-                        </div>
-                    </div>
-                    <!-- Hover overlay button -->
-                    <div class="absolute inset-0 bg-violet-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
-                        <span class="glass-button px-4 py-2 rounded-full text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                            View Work <i class="ph-bold ph-arrow-up-right"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PROJECT CARD 2 -->
-            <div class="project-card tilt-card h-96 rounded-3xl p-2 glass-panel group cursor-pointer reveal transition-delay-100">
-                <div class="w-full h-full rounded-[1.25rem] overflow-hidden relative tilt-card-inner">
-                    <img src="https://placehold.co/800x600/e2e8f0/7c3aed?text=Safa+Tasbeeh+App" alt="Safa Tasbeeh App" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="p-6 relative z-10">
-                        <h3 class="font-heading text-xl font-bold heading-text mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">Safa Tasbeeh App</h3>
-                        <p class="text-sm muted-text mb-4 line-clamp-2">A beautiful and functional digital Tasbeeh counter application designed with a focus on user experience and responsive layout.</p>
-                        <div class="flex gap-2 flex-wrap">
-                            <span class="text-xs px-2 py-1 rounded-md bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300 font-medium border border-violet-200 dark:border-violet-800">React</span>
-                            <span class="text-xs px-2 py-1 rounded-md bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300 font-medium border border-violet-200 dark:border-violet-800">Web App</span>
-                        </div>
-                    </div>
-                    <div class="absolute inset-0 bg-violet-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20">
-                        <span class="glass-button px-4 py-2 rounded-full text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                            View Work <i class="ph-bold ph-arrow-up-right"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <section id="skills" class="py-24 px-4 sm:px-8 max-w-5xl mx-auto">
-        <div class="glass-panel rounded-[2.5rem] p-8 md:p-16 relative overflow-hidden reveal">
-            <!-- Decorative background element inside the card -->
-            <div class="absolute top-0 right-0 w-64 h-64 bg-violet-200 dark:bg-violet-900/30 rounded-full mix-blend-multiply filter blur-[80px] opacity-50 pointer-events-none"></div>
-            
-            <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h2 class="font-heading text-3xl md:text-5xl font-bold heading-text mb-6">Skills & <span class="text-violet-600 dark:text-violet-400">Expertise</span></h2>
-                    <p class="muted-text mb-8 leading-relaxed">
-                        I bridge the gap between design and development. With a strong foundation in web technologies and a keen eye for aesthetics, I build responsive applications while currently exploring the exciting world of AI.
-                    </p>
-                    
-                    <div class="flex flex-col gap-4 mb-6">
-                        <!-- Education Link -->
-                        <a href="https://aktu.ac.in/" target="_blank" rel="noopener noreferrer" class="glass-button p-4 rounded-2xl flex items-center gap-4 hover:border-violet-500 transition-colors group">
-                            <div class="w-10 h-10 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center text-violet-600 dark:text-violet-400 group-hover:scale-110 transition-transform">
-                                <i class="ph-fill ph-student"></i>
-                            </div>
-                            <div class="text-left">
-                                <h4 class="text-sm font-bold heading-text group-hover:text-violet-600 dark:group-hover:text-violet-400">Dr. APJ Abdul Kalam University</h4>
-                                <p class="text-xs muted-text mt-1">Pursuing Engineering</p>
-                            </div>
-                            <i class="ph ph-arrow-up-right ml-auto heading-text opacity-50 group-hover:opacity-100 group-hover:text-violet-600"></i>
-                        </a>
-                        
-                        <div class="glass-panel p-4 rounded-2xl flex items-center gap-4">
-                             <div class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-400">
-                                <i class="ph-fill ph-buildings"></i>
-                            </div>
-                            <div class="text-left">
-                                <h4 class="text-sm font-bold heading-text">Dr. Rizvi Learners Academy, UP</h4>
-                                <p class="text-xs muted-text mt-1">Completed 10th & 12th</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Skill Tags Grid -->
-                <div class="flex flex-wrap gap-3">
-                    <span class="px-5 py-3 rounded-full border border-violet-200 dark:border-violet-800 bg-white/50 dark:bg-slate-800/50 heading-text font-medium hover:bg-violet-600 hover:text-white dark:hover:text-white hover:border-violet-600 transition-all cursor-default shadow-sm backdrop-blur-sm">HTML / CSS</span>
-                    <span class="px-5 py-3 rounded-full border border-violet-200 dark:border-violet-800 bg-white/50 dark:bg-slate-800/50 heading-text font-medium hover:bg-violet-600 hover:text-white dark:hover:text-white hover:border-violet-600 transition-all cursor-default shadow-sm backdrop-blur-sm">JavaScript</span>
-                    <span class="px-5 py-3 rounded-full border border-violet-200 dark:border-violet-800 bg-white/50 dark:bg-slate-800/50 heading-text font-medium hover:bg-violet-600 hover:text-white dark:hover:text-white hover:border-violet-600 transition-all cursor-default shadow-sm backdrop-blur-sm">React.js</span>
-                    <span class="px-5 py-3 rounded-full border border-violet-200 dark:border-violet-800 bg-white/50 dark:bg-slate-800/50 heading-text font-medium hover:bg-violet-600 hover:text-white dark:hover:text-white hover:border-violet-600 transition-all cursor-default shadow-sm backdrop-blur-sm">Python</span>
-                    <span class="px-5 py-3 rounded-full border border-violet-200 dark:border-violet-800 bg-white/50 dark:bg-slate-800/50 heading-text font-medium hover:bg-violet-600 hover:text-white dark:hover:text-white hover:border-violet-600 transition-all cursor-default shadow-sm backdrop-blur-sm">C / C++</span>
-                    <span class="px-5 py-3 rounded-full border border-violet-200 dark:border-violet-800 bg-white/50 dark:bg-slate-800/50 heading-text font-medium hover:bg-violet-600 hover:text-white dark:hover:text-white hover:border-violet-600 transition-all cursor-default shadow-sm backdrop-blur-sm">DBMS</span>
-                    <span class="px-5 py-3 rounded-full border border-violet-200 dark:border-violet-800 bg-white/50 dark:bg-slate-800/50 heading-text font-medium hover:bg-violet-600 hover:text-white dark:hover:text-white hover:border-violet-600 transition-all cursor-default shadow-sm backdrop-blur-sm">Graphic Design</span>
-                    <span class="px-5 py-3 rounded-full border border-violet-500 bg-violet-100/50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 font-bold hover:bg-violet-600 hover:text-white transition-all cursor-default shadow-sm backdrop-blur-sm flex items-center gap-2"><i class="ph-fill ph-sparkle"></i> Aspiring AI</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="certifications" class="py-24 px-4 sm:px-8 max-w-6xl mx-auto">
-        <div class="mb-16 text-center reveal">
-            <h2 class="font-heading text-4xl md:text-5xl font-bold heading-text mb-4">Certifications</h2>
-            <p class="muted-text">Continuous learning to keep the magic alive.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- EDIT: Certification Item 1 -->
-            <div class="glass-panel p-6 rounded-3xl flex items-center gap-6 group hover:border-violet-400 transition-colors reveal">
-                <div class="w-16 h-16 rounded-2xl bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center text-violet-600 dark:text-violet-400 text-3xl group-hover:scale-110 transition-transform">
-                    <i class="ph-fill ph-certificate"></i>
-                </div>
-                <div>
-                    <h4 class="font-heading font-bold text-lg heading-text">Web Development Bootcamp</h4>
-                    <p class="text-sm muted-text">Udemy • Issued 2023</p>
-                </div>
-            </div>
-
-            <!-- EDIT: Certification Item 2 -->
-            <div class="glass-panel p-6 rounded-3xl flex items-center gap-6 group hover:border-violet-400 transition-colors reveal transition-delay-100">
-                <div class="w-16 h-16 rounded-2xl bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center text-violet-600 dark:text-violet-400 text-3xl group-hover:scale-110 transition-transform">
-                    <i class="ph-fill ph-palette"></i>
-                </div>
-                <div>
-                    <h4 class="font-heading font-bold text-lg heading-text">Graphic Design Masterclass</h4>
-                    <p class="text-sm muted-text">Skillshare • Issued 2022</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="py-32 px-4 sm:px-8 text-center relative overflow-hidden">
-        <!-- Dreamy gradient background specifically for CTA -->
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-violet-50/80 dark:to-violet-900/20 -z-10 transition-colors duration-300"></div>
-        
-        <div class="max-w-3xl mx-auto reveal">
-            <div class="inline-block mb-6 px-4 py-1.5 rounded-full bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300 text-sm font-semibold tracking-wide uppercase border border-violet-200 dark:border-violet-800">
-                Connection
-            </div>
-            <h2 class="font-heading text-5xl md:text-7xl font-extrabold heading-text mb-8 leading-tight">
-                Let's build something <span class="italic text-violet-600 dark:text-violet-400">beautiful</span> together.
-            </h2>
-            <p class="text-lg muted-text mb-12">
-                Currently open for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
-            </p>
-
-            <!-- EDIT: Contact Email -->
-            <a href="mailto:mohammaduzaif0111@gmail.com" class="inline-flex items-center justify-center gap-3 px-10 py-5 text-lg font-bold text-white transition-all duration-300 bg-violet-600 rounded-full hover:bg-violet-700 shadow-xl hover:shadow-[0_10px_40px_rgb(124,58,237,0.4)] hover:-translate-y-1">
-                Say Hello <i class="ph-bold ph-paper-plane-tilt"></i>
+            <a class="btn btn-ghost magnetic resume-btn" href="assets/Uzaif_Resume.pdf" download>
+              Download resume <span>↓</span>
             </a>
+          </div>
 
-            <!-- Social Links & Animated Connections -->
-            <div class="mt-16 flex flex-col items-center gap-6">
-                
-                <!-- Animated 1000+ Connections Badge -->
-                <div class="glass-panel px-6 py-3 rounded-full flex items-center gap-3 animate-float shadow-lg border-violet-200 dark:border-violet-800">
-                    <div class="flex -space-x-2">
-                        <img class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-800" src="https://i.pravatar.cc/100?img=1" alt="Avatar">
-                        <img class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-800" src="https://i.pravatar.cc/100?img=2" alt="Avatar">
-                        <img class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-800" src="https://i.pravatar.cc/100?img=3" alt="Avatar">
-                    </div>
-                    <div class="text-sm font-medium heading-text flex items-center gap-2">
-                        <i class="ph-fill ph-linkedin-logo text-blue-600"></i>
-                        <span><strong class="text-violet-600 dark:text-violet-400">1000+</strong> Connections globally</span>
-                    </div>
-                </div>
-
-                <div class="flex justify-center gap-6">
-                    <a href="#" class="w-12 h-12 rounded-full glass-button flex items-center justify-center text-xl heading-text hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
-                        <i class="ph-fill ph-github-logo"></i>
-                    </a>
-                    <a href="#" class="w-12 h-12 rounded-full glass-button flex items-center justify-center text-xl heading-text hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
-                        <i class="ph-fill ph-linkedin-logo"></i>
-                    </a>
-                    <a href="#" class="w-12 h-12 rounded-full glass-button flex items-center justify-center text-xl heading-text hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
-                        <i class="ph-fill ph-twitter-logo"></i>
-                    </a>
-                </div>
+          <div class="hero-meta reveal">
+            <div>
+              <span class="meta-label">Based in</span>
+              <strong>Greater Allahabad Area, UP</strong>
             </div>
+            <div>
+              <span class="meta-label">Focus</span>
+              <strong>Frontend • AI/ML • Problem Solving</strong>
+            </div>
+            <div>
+              <span class="meta-label">Local time</span>
+              <strong id="clock">--:--:--</strong>
+            </div>
+          </div>
         </div>
+
+        <aside class="hero-visual right-rail" aria-hidden="true">
+          <div class="ribbon ribbon-one"></div>
+          <div class="ribbon ribbon-two"></div>
+          <div class="ribbon ribbon-three"></div>
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="orb-core"></div>
+          <div class="visual-label">AVAILABLE<br />TO BUILD<br /><span>✦</span></div>
+        </aside>
+      </div>
+
+      <div class="scroll-cue">
+        <span class="scroll-line"></span>
+        Scroll to explore
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="py-8 text-center muted-text text-sm border-t border-gray-200/50 dark:border-slate-700/50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-md transition-colors duration-300">
-        <p>© <span id="current-year"></span> Mohd Uzaif Ansari. Designed with cozy vibes.</p>
-    </footer>
+    <!-- =======================================================
+         PROJECTS
+         Add projects by duplicating a .project-card and editing
+         title / description / tech / live URL / GitHub URL.
+    ======================================================== -->
+    <section class="projects section-shell" id="projects">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Selected work</p>
+          <h2>Projects that <span>move.</span></h2>
+        </div>
+        <p class="section-note">Real builds, experiments and academic work.</p>
+      </div>
 
-    <script>
-        // --- 1. Live Clock Functionality ---
-        function updateClock() {
-            const clockElement = document.getElementById('live-clock');
-            if(clockElement) {
-                const now = new Date();
-                let hours = now.getHours();
-                let minutes = now.getMinutes();
-                let seconds = now.getSeconds();
-                const ampm = hours >= 12 ? 'PM' : 'AM';
-                
-                hours = hours % 12;
-                hours = hours ? hours : 12; // the hour '0' should be '12'
-                minutes = minutes < 10 ? '0' + minutes : minutes;
-                seconds = seconds < 10 ? '0' + seconds : seconds;
-                
-                const timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-                clockElement.textContent = timeString + ' IST'; // Note: Adjust timezone display if needed
-            }
-        }
-        setInterval(updateClock, 1000);
-        updateClock(); // Initial call
+      <div class="projects-layout">
+        <div class="typing-stage">
+          <div class="typing-glow"></div>
+          <div class="desk">
+            <div class="laptop">
+              <div class="screen-frame">
+                <div class="screen-ui">
+                  <div class="pine-apple">
+                    <span class="pine-crown">✦</span>
+                    <span class="pine-body"></span>
+                  </div>
+                  <div class="code-lines">
+                    <i style="width: 78%"></i>
+                    <i style="width: 62%"></i>
+                    <i style="width: 88%"></i>
+                    <i style="width: 48%"></i>
+                    <i style="width: 68%"></i>
+                    <i style="width: 40%"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="laptop-base"></div>
+            </div>
+            <div class="person">
+              <div class="person-head"></div>
+              <div class="person-neck"></div>
+              <div class="person-body"></div>
+              <div class="person-arm arm-one"></div>
+              <div class="person-arm arm-two"></div>
+              <div class="hand hand-one"></div>
+              <div class="hand hand-two"></div>
+            </div>
+          </div>
+          <div class="typing-caption">
+            <span class="typing-cursor">▮</span> writing code, one idea at a time
+          </div>
+        </div>
 
-        // Set Current Year in Footer
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        <div class="project-list">
+          <!-- PROJECT 01 -->
+          <article class="project-card">
+            <div class="project-index">01</div>
+            <div class="project-main">
+              <div class="project-topline">
+                <span>Web App</span>
+                <span class="project-status">Live</span>
+              </div>
+              <h3>LocalLink</h3>
+              <p>
+                A community-focused platform concept that connects people within a district
+                for local jobs, help, sharing and opportunities.
+              </p>
+              <div class="tech-row">
+                <span>HTML</span><span>CSS</span><span>JavaScript</span><span>UI/UX</span>
+              </div>
+              <div class="project-links">
+                <a href="#" target="_blank" rel="noopener">Live link ↗</a>
+                <a href="#" target="_blank" rel="noopener">Source code ↗</a>
+              </div>
+            </div>
+          </article>
 
-        // --- 2. Liquid Switch Logic (Hired vs Open to Work) ---
-        let isHired = true; // Initial State (Left side)
-        function toggleStatus() {
-            isHired = !isHired;
-            const switchEl = document.getElementById('statusSwitch');
-            const leftText = document.getElementById('status-left');
-            const rightText = document.getElementById('status-right');
-            const dotLeft = document.getElementById('dot-left');
-            const dotRight = document.getElementById('dot-right');
-            
-            if (!isHired) {
-                // Toggled to Right (Open to Work)
-                switchEl.classList.add('active');
-                
-                leftText.classList.remove('heading-text');
-                leftText.classList.add('muted-text');
-                dotLeft.style.opacity = '0';
-                
-                rightText.classList.remove('muted-text');
-                rightText.classList.add('heading-text');
-                dotRight.style.opacity = '1';
-            } else {
-                // Toggled to Left (Hired)
-                switchEl.classList.remove('active');
-                
-                rightText.classList.remove('heading-text');
-                rightText.classList.add('muted-text');
-                dotRight.style.opacity = '0';
-                
-                leftText.classList.remove('muted-text');
-                leftText.classList.add('heading-text');
-                dotLeft.style.opacity = '1';
-            }
-        }
+          <!-- PROJECT 02 -->
+          <article class="project-card">
+            <div class="project-index">02</div>
+            <div class="project-main">
+              <div class="project-topline">
+                <span>AI / ML</span>
+                <span class="project-status">Build</span>
+              </div>
+              <h3>Recommendation Lab</h3>
+              <p>
+                A learning project exploring recommendation logic, data preparation and
+                practical machine-learning workflows.
+              </p>
+              <div class="tech-row">
+                <span>Python</span><span>ML</span><span>Data</span><span>Notebooks</span>
+              </div>
+              <div class="project-links">
+                <a href="#" target="_blank" rel="noopener">Live link ↗</a>
+                <a href="#" target="_blank" rel="noopener">Source code ↗</a>
+              </div>
+            </div>
+          </article>
 
-        // --- 3. Dark Mode Toggle Logic ---
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        
-        // Check for saved theme preference or system preference
-        const savedTheme = localStorage.getItem('theme');
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
-            document.body.classList.add('dark-mode');
-            themeIcon.classList.replace('ph-moon', 'ph-sun');
-        }
+          <!-- PROJECT 03 -->
+          <article class="project-card">
+            <div class="project-index">03</div>
+            <div class="project-main">
+              <div class="project-topline">
+                <span>Academic</span>
+                <span class="project-status">Research</span>
+              </div>
+              <h3>Smart Grid Scheduling</h3>
+              <p>
+                A presentation/research concept around blockchain-based intelligent
+                transaction scheduling for large-scale grid environments.
+              </p>
+              <div class="tech-row">
+                <span>Blockchain</span><span>Hyperledger</span><span>Scheduling</span><span>AI</span>
+              </div>
+              <div class="project-links">
+                <a href="#" target="_blank" rel="noopener">Case study ↗</a>
+                <a href="#" target="_blank" rel="noopener">Source ↗</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            
-            if (isDark) {
-                themeIcon.classList.replace('ph-moon', 'ph-sun');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                themeIcon.classList.replace('ph-sun', 'ph-moon');
-                localStorage.setItem('theme', 'light');
-            }
-        });
+    <!-- =======================================================
+         SKILLS
+    ======================================================== -->
+    <section class="skills section-shell" id="skills">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Toolkit</p>
+          <h2>Skills I’m <span>building.</span></h2>
+        </div>
+      </div>
 
-        // --- 4. 3D Tilt Effect on Project Cards ---
-        const cards = document.querySelectorAll('.tilt-card');
-        
-        cards.forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left; // x position within the element.
-                const y = e.clientY - rect.top;  // y position within the element.
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                // Calculate rotation based on mouse position
-                const rotateX = ((y - centerY) / centerY) * -10; // Max rotation 10deg
-                const rotateY = ((x - centerX) / centerX) * 10;
-                
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
-            
-            // Reset rotation when mouse leaves
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
-                // Add a smooth transition back to resting state
-                card.style.transition = 'transform 0.5s ease';
-                setTimeout(() => {
-                    card.style.transition = ''; // Remove transition so hover effect is immediate again
-                }, 500);
-            });
-        });
+      <div class="skills-grid">
+        <div class="skill-card large">
+          <span class="skill-no">01</span>
+          <h3>Development</h3>
+          <p>HTML, CSS, JavaScript, responsive design, UI implementation and Git/GitHub.</p>
+          <div class="skill-marquee">
+            <span>HTML</span><span>CSS</span><span>JAVASCRIPT</span><span>GIT</span><span>GITHUB</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <span class="skill-no">02</span>
+          <h3>AI / ML</h3>
+          <p>Python foundations, data workflows and machine-learning fundamentals.</p>
+          <div class="skill-badge">PYTHON × ML</div>
+        </div>
+        <div class="skill-card">
+          <span class="skill-no">03</span>
+          <h3>Currently learning</h3>
+          <p>React, stronger JavaScript fundamentals, APIs, JSON and software engineering practices.</p>
+          <div class="skill-badge lime">IN PROGRESS ↗</div>
+        </div>
+        <div class="skill-card">
+          <span class="skill-no">04</span>
+          <h3>Mindset</h3>
+          <p>Curiosity, consistency, communication, presentation and problem solving.</p>
+          <div class="skill-badge">ALWAYS LEARNING</div>
+        </div>
+      </div>
+    </section>
 
-        // --- 5. Scroll Reveal Animation (Intersection Observer) ---
-        const revealElements = document.querySelectorAll('.reveal');
-        
-        const revealCallback = (entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Stop observing once revealed
-                }
-            });
-        };
-        
-        const revealOptions = {
-            threshold: 0.15, // Trigger when 15% of element is visible
-            rootMargin: "0px 0px -50px 0px"
-        };
-        
-        const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
-        
-        revealElements.forEach(el => revealObserver.observe(el));
+    <!-- =======================================================
+         CERTIFICATIONS
+         IMPORTANT: To add a new certification, copy one card
+         and change ONLY the image src, title, provider, date,
+         and certificate link.
+    ======================================================== -->
+    <section class="certifications section-shell" id="certifications">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Proof of learning</p>
+          <h2>Certificates & <span>milestones.</span></h2>
+        </div>
+        <button class="scroll-toggle" id="certToggle" type="button">Pause ↗</button>
+      </div>
 
-        // --- 6. Navbar Glassmorphism scroll effect ---
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('shadow-lg');
-                if(document.body.classList.contains('dark-mode')) {
-                    navbar.style.background = 'rgba(30, 41, 59, 0.8)';
-                } else {
-                    navbar.style.background = 'rgba(255, 255, 255, 0.8)';
-                }
-            } else {
-                navbar.classList.remove('shadow-lg');
-                navbar.style.background = ''; // Revert to class-based styling
-            }
-        });
-    </script>
+      <div class="cert-track" id="certTrack">
+        <!-- COPY THIS CARD TO ADD ANOTHER CERTIFICATE -->
+        <article class="cert-card">
+          <div class="cert-image">
+            <img src="assets/certification-1.jpg" alt="Certification preview 1"
+                 onerror="this.style.display='none'; this.parentElement.classList.add('image-placeholder');" />
+            <span>01</span>
+          </div>
+          <div class="cert-info">
+            <p>AI / ML</p>
+            <h3>AI/ML Learning Certificate</h3>
+            <span>Apna College • 2026</span>
+            <a href="#" target="_blank" rel="noopener">View credential ↗</a>
+          </div>
+        </article>
+
+        <article class="cert-card">
+          <div class="cert-image">
+            <img src="assets/certification-2.jpg" alt="Certification preview 2"
+                 onerror="this.style.display='none'; this.parentElement.classList.add('image-placeholder');" />
+            <span>02</span>
+          </div>
+          <div class="cert-info">
+            <p>Web Development</p>
+            <h3>Frontend Development Certificate</h3>
+            <span>Learning platform • 2026</span>
+            <a href="#" target="_blank" rel="noopener">View credential ↗</a>
+          </div>
+        </article>
+
+        <article class="cert-card">
+          <div class="cert-image">
+            <img src="assets/certification-3.jpg" alt="Certification preview 3"
+                 onerror="this.style.display='none'; this.parentElement.classList.add('image-placeholder');" />
+            <span>03</span>
+          </div>
+          <div class="cert-info">
+            <p>Programming</p>
+            <h3>Programming Foundations</h3>
+            <span>Learning platform • 2026</span>
+            <a href="#" target="_blank" rel="noopener">View credential ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         EDUCATION
+    ======================================================== -->
+    <section class="education section-shell" id="education">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Education</p>
+          <h2>The path so <span>far.</span></h2>
+        </div>
+      </div>
+
+      <div class="education-timeline">
+        <article class="edu-row">
+          <div class="edu-year">2022 — 2026</div>
+          <div class="edu-mark">01</div>
+          <div class="edu-detail">
+            <h3>Dr. A.P.J. Abdul Kalam Technical University</h3>
+            <p>Lucknow, Uttar Pradesh</p>
+            <strong>B.Tech — Computer Science & Engineering</strong>
+            <span>Active / Final Year</span>
+          </div>
+        </article>
+
+        <article class="edu-row">
+          <div class="edu-year">Senior Secondary</div>
+          <div class="edu-mark">02</div>
+          <div class="edu-detail">
+            <h3>Dr. Rizvi Learners Academy</h3>
+            <p>Jaunpur, Uttar Pradesh</p>
+            <strong>Class XII</strong>
+          </div>
+        </article>
+
+        <article class="edu-row">
+          <div class="edu-year">Secondary</div>
+          <div class="edu-mark">03</div>
+          <div class="edu-detail">
+            <h3>Dr. Rizvi Learners Academy</h3>
+            <p>Jaunpur, Uttar Pradesh</p>
+            <strong>Class X</strong>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         CTA / CONTACT
+    ======================================================== -->
+    <section class="contact section-shell" id="contact">
+      <div class="cta-card">
+        <div class="cta-top">
+          <span class="eyebrow">Next chapter</span>
+          <span class="cta-location">India · UP</span>
+        </div>
+        <h2>Let’s turn a good<br /><span>idea into something real.</span></h2>
+        <p>
+          Open to internships, fresher opportunities, collaborations and interesting
+          projects where curiosity meets impact.
+        </p>
+
+        <div class="social-grid">
+          <a class="social-link" href="#" target="_blank" rel="noopener">
+            <span class="social-icon">in</span>
+            <span>LinkedIn</span>
+            <small>Connect professionally ↗</small>
+          </a>
+          <a class="social-link" href="#" target="_blank" rel="noopener">
+            <span class="social-icon">GH</span>
+            <span>GitHub</span>
+            <small>See the code ↗</small>
+          </a>
+          <a class="social-link" href="mailto:your-email@example.com">
+            <span class="social-icon">@</span>
+            <span>Email</span>
+            <small>Start a conversation ↗</small>
+          </a>
+          <a class="social-link" href="#" target="_blank" rel="noopener">
+            <span class="social-icon">ig</span>
+            <span>Instagram</span>
+            <small>Beyond the code ↗</small>
+          </a>
+        </div>
+
+        <div class="cta-signature">Designed & coded by <strong>UZAIF</strong><span>✦</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© <span id="year"></span> Mohammad Uzaif Ansari</span>
+    <span>Built with HTML · CSS · JavaScript</span>
+    <button id="backToTop" type="button" class="back-top magnetic">Back to top ↑</button>
+  </footer>
+
+  <!-- Resume success overlay -->
+  <div class="download-toast" id="downloadToast">
+    <span class="download-check">✓</span>
+    <div>
+      <strong>Resume download started</strong>
+      <small>Thanks for taking a look.</small>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
